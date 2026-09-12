@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediKiosk Voice — test harness</title>
+<style>
+  :root {
+    --bg:#f5f6f3; --surface:#fff; --ink:#16211d; --ink-soft:#4b5a53; --border:#d9ddd3;
+    --teal:#0f6e63; --teal-soft:#e2efec; --red:#a3352c; --red-soft:#f5e3e0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#101613; --surface:#161f1a; --ink:#eef2ee; --ink-soft:#a9b6ae; --border:#2a352e;
+      --teal:#4db8a6; --teal-soft:#16302c; --red:#e08079; --red-soft:#3a2220; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui, sans-serif; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 20px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .setup { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  label { font-size: 13.5px; color: var(--ink-soft); display: flex; gap: 6px; align-items: center; }
+  select, input[type=text] { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+  button { font: inherit; padding: 9px 16px; border-radius: 8px; border: 1px solid var(--teal); background: var(--teal-soft); color: var(--teal); cursor: pointer; }
+  button.recording { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  pre { font-size: 12.5px; white-space: pre-wrap; word-break: break-word; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-height: 60px; }
+  .err { background: var(--red-soft); color: var(--red); padding: 8px 12px; border-radius: 8px; font-size: 13px; margin-top: 10px; display:none; }
+  .badge { font-size: 12px; padding: 3px 9px; border-radius: 100px; border: 1px solid var(--border); color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MediKiosk — Voice / Speech-to-Text (test harness)</h1>
+  <p class="sub">Bare test page for this module only — not the real kiosk UI. Record a clip, see the transcript.</p>
+
+  <div class="panel">
+    <div class="setup">
+      <label>Backend:
+        <select id="backend">
+          <option value="auto">Auto (server default)</option>
+          <option value="whisper">Whisper (local)</option>
+          <option value="mock">Mock (offline)</option>
+        </select>
+      </label>
+      <label>Language hint: <input type="text" id="language" placeholder="e.g. en, hi (blank = auto-detect)" style="width:220px"></label>
+      <span id="availBadge" class="badge"></span>
+    </div>
+    <button id="recordBtn">Start recording</button>
+    <span id="status" class="sub" style="margin-left:10px;"></span>
+    <div id="err" class="err"></div>
+  </div>
+
+  <div class="panel">
+    <div class="sub" style="margin-bottom:8px">Result</div>
+    <pre id="result">{}</pre>
+  </div>
+</div>
+
+<script>
+const backendSelect = document.getElementById('backend');
+const languageInput = document.getElementById('language');
+const recordBtn = document.getElementById('recordBtn');
+const statusEl = document.getElementById('status');
+const resultEl = document.getElementById('result');
+const errEl = document.getElementById('err');
+const availBadge = document.getElementById('availBadge');
+
+let mediaRecorder = null;
+let chunks = [];
+let recording = false;
+
+async function refreshBackends() {
+  try {
+    const res = await fetch('/backends');
+    const data = await res.json();
+    availBadge.textContent = data.whisper.available
+      ? `whisper: ${data.whisper.model} (${data.whisper.device})`
+      : 'whisper: not available (using mock)';
+  } catch (e) {
+    availBadge.textContent = '/backends unreachable';
+  }
+}
+refreshBackends();
+
+recordBtn.addEventListener('click', async () => {
+  if (!recording) {
+    errEl.style.display = 'none';
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      chunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+      mediaRecorder.onstop = onRecordingStop;
+      mediaRecorder.start();
+      recording = true;
+      recordBtn.textContent = 'Stop recording';
+      recordBtn.classList.add('recording');
+      statusEl.textContent = 'Recording…';
+    } catch (e) {
+      errEl.textContent = 'Could not access the microphone: ' + e.message;
+      errEl.style.display = 'block';
+    }
+  } else {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    recording = false;
+    recordBtn.textContent = 'Start recording';
+    recordBtn.classList.remove('recording');
+  }
+});
+
+async function onRecordingStop() {
+  statusEl.textContent = 'Transcribing…';
+  const blob = new Blob(chunks, { type: 'audio/webm' });
+  const fd = new FormData();
+  fd.append('file', blob, 'clip.webm');
+  fd.append('backend', backendSelect.value);
+  if (languageInput.value.trim()) fd.append('language', languageInput.value.trim());
+
+  try {
+    const res = await fetch('/transcribe', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.detail || `HTTP ${res.status}`;
+      errEl.style.display = 'block';
+      statusEl.textContent = '';
+      return;
+    }
+    resultEl.textContent = JSON.stringify(data, null, 2);
+    statusEl.textContent = 'Done.';
+  } catch (e) {
+    errEl.textContent = 'Request failed: ' + e.message;
+    errEl.style.display = 'block';
+    statusEl.textContent = '';
+  }
+}
+</script>
+</body>
+</html>
