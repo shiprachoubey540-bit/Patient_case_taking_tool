@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>MediKiosk — Patient Check-In</title>
+<style>
+  :root {
+    --primary: #0f766e;
+    --primary-dark: #0c5c56;
+    --primary-light: #f0fdfa;
+    --ink: #143331;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --danger: #b91c1c;
+    --danger-bg: #fee2e2;
+    --warning: #92400e;
+    --warning-bg: #fef3c7;
+    --muted: #5f7371;
+    --bg: #f6faf9;
+    --card: #ffffff;
+    --border: #dfe9e6;
+    --shadow-sm: 0 1px 2px rgba(15, 60, 55, 0.05);
+    --shadow-md: 0 4px 18px rgba(12, 92, 86, 0.08);
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  #app {
+    max-width: 720px; margin: 0 auto; min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header.kiosk-header {
+    padding: 20px 28px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--shadow-md);
+  }
+  header.kiosk-header .brand { display: flex; align-items: center; gap: 12px; }
+  header.kiosk-header .brand-mark {
+    width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.16);
+    display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  }
+  header.kiosk-header h1 { font-size: 19px; margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+  header.kiosk-header .subtitle { font-size: 12px; opacity: 0.85; margin-top: 1px; }
+  main { flex: 1; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .screen { display: none; flex-direction: column; gap: 16px; }
+  .screen.active { display: flex; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow-sm);
+  }
+  h2 { margin: 0 0 4px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  p.lead { color: var(--muted); margin: 0 0 14px; font-size: 15px; line-height: 1.45; }
+  label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; color: #1f4a46; }
+  input[type=text], select {
+    width: 100%; padding: 13px 14px; font-size: 16px; border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 14px; background: #fff; color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type=text]:focus, select:focus {
+    outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .checkbox-row input { width: 20px; height: 20px; accent-color: var(--primary); }
+  .checkbox-row label { margin: 0; font-weight: 500; color: var(--ink); }
+  button {
+    font-size: 15px; font-weight: 600; padding: 13px 22px; border-radius: 10px;
+    border: none; cursor: pointer; touch-action: manipulation;
+    transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  button:active { transform: scale(0.98); }
+  button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  button.primary { background: var(--primary); color: white; }
+  button.primary:hover { background: var(--primary-dark); }
+  button.secondary { background: #eaf5f3; color: #143331; }
+  button.secondary:hover { background: #d9ebe8; }
+  button.big { width: 100%; padding: 16px; font-size: 16px; box-shadow: var(--shadow-sm); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+
+  button.lang-btn { background: #eaf5f3; color: #143331; padding: 11px; }
+  button.lang-btn.selected { background: var(--primary); color: white; }
+
+  details.settings { font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; margin-top: 2px; }
+  details.settings summary { cursor: pointer; padding: 6px 0; font-weight: 600; color: #1f4a46; }
+  .avail-badge {
+    display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px;
+    margin-left: 6px; font-weight: 600;
+  }
+  .avail-yes { background: var(--success-bg); color: var(--success); }
+  .avail-no { background: var(--danger-bg); color: var(--danger); }
+
+  #chat-log { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; max-height: 55vh; overflow-y: auto; }
+  .bubble { max-width: 82%; padding: 12px 16px; border-radius: 18px; font-size: 16px; line-height: 1.45; }
+  .bubble.assistant { background: #eaf6f4; color: var(--ink); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bubble.patient { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .bubble.ack { font-style: italic; color: var(--muted); background: none; padding: 0 4px; font-size: 13px; }
+  #progress-note { font-size: 12px; color: var(--muted); text-align: center; font-weight: 600; letter-spacing: 0.02em; }
+  .bubble.thinking { display: flex; gap: 4px; align-items: center; }
+  .bubble.thinking span {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--primary);
+    opacity: 0.35; animation: dot-pulse 1.1s infinite;
+  }
+  .bubble.thinking span:nth-child(2) { animation-delay: 0.15s; }
+  .bubble.thinking span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes dot-pulse { 0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); } 40% { opacity: 1; transform: scale(1); } }
+  #wait-note { font-size: 12px; color: var(--muted); text-align: center; min-height: 16px; }
+
+  button.mic {
+    flex: 0 0 auto; width: 50px; height: 50px; padding: 0; border-radius: 50%;
+    background: #eaf5f3; color: #143331; font-size: 19px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  button.mic.recording { background: var(--danger); color: white; animation: mic-pulse 1.2s infinite; }
+  @keyframes mic-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(185,28,28,0.5); } 50% { box-shadow: 0 0 0 10px rgba(185,28,28,0); } }
+  #mic-status { font-size: 12px; color: var(--muted); text-align: center; min-height: 16px; }
+
+  .urgent-screen { background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius); padding: 36px 28px; text-align: center; box-shadow: var(--shadow-sm); }
+  .urgent-screen h2 { color: var(--danger); font-size: 24px; }
+  .urgent-screen p { color: #7f1d1d; line-height: 1.5; }
+
+  .doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .doc-item { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; font-size: 14px; background: #f9fdfc; }
+  .doc-item .doc-title { font-weight: 600; }
+  .badge { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px; background: var(--warning-bg); color: var(--warning); margin-left: 6px; font-weight: 600; }
+
+  .summary-section { margin-bottom: 16px; }
+  .summary-section h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 6px; font-weight: 700; }
+  .summary-section .value { font-size: 15px; }
+  ul.plain { margin: 4px 0; padding-left: 20px; }
+  .abnormal { color: var(--danger); font-weight: 600; }
+
+  #error-banner {
+    display: none; background: var(--danger-bg); color: var(--danger); padding: 12px 16px;
+    border-radius: 10px; font-size: 14px; border: 1px solid #fecaca;
+  }
+  footer { text-align: center; font-size: 11px; color: var(--muted); padding: 16px 8px 4px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="kiosk-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3v6M9 6h6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4 12c0-1.5 1-2.5 2.5-2.5S9 10.5 9 12s1 2.5 2.5 2.5S14 10.5 14 12s1 2.5 2.5 2.5S19 10.5 19 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>MediKiosk</h1>
+        <div class="subtitle">Patient self check-in</div>
+      </div>
+    </div>
+    <div class="subtitle" id="header-status"></div>
+  </header>
+
+  <main>
+    <div id="error-banner"></div>
+
+    {# All five screens are included here and rendered into one page, same
+       as when this was one big HTML file — the JS below still does the
+       show/hide between them with no page reload. Splitting these into
+       templates/screens/*.html is purely so each step of the flow has its
+       own file to read/edit; it does not change what gets sent to the
+       browser or how the page behaves. See templates/screens/ for each
+       screen's own markup. #}
+    {% include "screens/welcome.html" %}
+    {% include "screens/intake.html" %}
+    {% include "screens/urgent.html" %}
+    {% include "screens/upload.html" %}
+    {% include "screens/summary.html" %}
+    {% include "screens/done.html" %}
+  </main>
+</div>
+
+<script>
+const API = ""; // same-origin — this page is served by the kiosk backend itself
+let visitId = null;
+let visitToken = null; // shown to the patient at the end, used by the doctor-facing lookup view (see /doctor.html)
+let ackPending = null;
+let currentBackend = null; // "gemini" | "ollama" | "mock" — set at visit start, used to set honest wait-timer copy
+let selectedLanguage = "en"; // "en" | "hi" — the language the interview is conducted in, picked on the welcome screen
+
+function $(id) { return document.getElementById(id); }
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+}
+
+function showError(msg) {
+  const el = $("error-banner");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+function clearError() {
+  $("error-banner").style.display = "none";
+}
+
+async function api(path, opts = {}) {
+  clearError();
+  let res;
+  try {
+    res = await fetch(API + path, opts);
+  } catch (e) {
+    showError("Couldn't reach the kiosk backend. Is it running?");
+    throw e;
+  }
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { detail = (await res.json()).detail || detail; } catch (e) {}
+    showError(detail);
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
+// ---- Welcome / backend availability ----
+
+async function loadBackendAvailability() {
+  try {
+    const data = await api("/backends");
+    const parts = [];
+    if (data.converse && !data.converse.error) {
+      parts.push(`Gemini${badge(data.converse.gemini && data.converse.gemini.available)} · Ollama${badge(data.converse.ollama && data.converse.ollama.available)}`);
+    } else {
+      parts.push(`<span class="avail-badge avail-no">intake service unreachable</span>`);
+    }
+    if (!data.ocr || data.ocr.error) {
+      parts.push(`<span class="avail-badge avail-no">scan service unreachable</span>`);
+    }
+    if (!data.voice || data.voice.error) {
+      parts.push(`<span class="avail-badge avail-no">voice service unreachable — mic hidden</span>`);
+      $("btn-mic").style.display = "none";
+    } else if (!data.voice.whisper || !data.voice.whisper.available) {
+      parts.push(`<span class="avail-badge avail-no">voice: mock only (no Whisper)</span>`);
+    }
+    $("backend-availability").innerHTML = parts.join(" &nbsp; ");
+
+    // Keep the "Ollama" option honest about which model is actually
+    // configured — converse-module's OLLAMA_MODEL env var can point at any
+    // local model (gemma4:12b, medgemma:4b, whatever's being tested that
+    // day), and this dropdown used to hardcode "gemma4:12b" regardless,
+    // which would quietly lie the moment someone switched models. The
+    // /backends response already reports the real configured name, so
+    // there's no reason for this label to ever go stale again.
+    const ollamaModel = data.converse && data.converse.ollama && data.converse.ollama.model;
+    if (ollamaModel) {
+      $("ollama-option").textContent = `Ollama (local, ${ollamaModel})`;
+    }
+  } catch (e) { /* error already shown */ }
+}
+function badge(ok) {
+  return ok ? `<span class="avail-badge avail-yes">available</span>` : `<span class="avail-badge avail-no">unavailable</span>`;
+}
+
+// ---- Language selection ----
+
+document.querySelectorAll("#lang-row .lang-btn").forEach(btn => {
+  btn.onclick = () => {
+    selectedLanguage = btn.dataset.lang;
+    document.querySelectorAll("#lang-row .lang-btn").forEach(b => b.classList.toggle("selected", b === btn));
+  };
+});
+
+// ---- Start visit ----
+
+$("btn-start").onclick = async () => {
+  $("btn-start").disabled = true;
+  try {
+    const body = {
+      patient_name: $("patient-name").value.trim() || null,
+      ayush_mode: $("ayush-mode").checked,
+      backend: $("backend-select").value,
+      language: selectedLanguage,
+    };
+    const data = await api("/visits", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    });
+    visitId = data.visit_id;
+    visitToken = data.token;
+    currentBackend = data.converse_backend || null;
+    $("header-status").textContent = data.converse_backend ? `engine: ${data.converse_backend}` : "";
+    $("chat-log").innerHTML = "";
+    $("mic-status").textContent = "";
+    addBubble("assistant", data.question);
+    showScreen("screen-intake");
+    $("chat-input").focus();
+  } catch (e) {
+    // error already shown
+  } finally {
+    $("btn-start").disabled = false;
+  }
+};
+
+// ---- Intake chat ----
+
+let patientTurnCount = 0;
+
+function addBubble(role, text) {
+  if (!text) return;
+  const div = document.createElement("div");
+  div.className = "bubble " + role;
+  div.textContent = text;
+  $("chat-log").appendChild(div);
+  $("chat-log").scrollTop = $("chat-log").scrollHeight;
+}
+function addAck(text) {
+  if (!text) return;
+  const div = document.createElement("div");
+  div.className = "bubble ack";
+  div.textContent = text;
+  $("chat-log").appendChild(div);
+}
+
+function addThinkingBubble() {
+  const div = document.createElement("div");
+  div.className = "bubble assistant thinking";
+  div.innerHTML = "<span></span><span></span><span></span>";
+  $("chat-log").appendChild(div);
+  $("chat-log").scrollTop = $("chat-log").scrollHeight;
+  return div;
+}
+function removeThinkingBubble(el) {
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+}
+
+// Empty bubble that sendMessage() below fills in progressively as "live
+// token" delta events arrive, instead of addBubble/addAck's all-at-once
+// textContent = text. cls is "ack" or "assistant" — same classes
+// addAck/addBubble already use, so this looks identical once filled.
+function startLiveBubble(cls) {
+  const div = document.createElement("div");
+  div.className = "bubble " + cls;
+  div.textContent = "";
+  $("chat-log").appendChild(div);
+  $("chat-log").scrollTop = $("chat-log").scrollHeight;
+  return div;
+}
+
+// Every backend re-derives the whole clinical history each turn, not just
+// the next question, so this is never instant — and Gemini (10-20s) and
+// Ollama (varies a lot by hardware — can be well over a minute, especially
+// the first turn while the model loads into memory) have very different
+// honest expectations to set. Without feedback at all this reads as a
+// frozen page rather than a slow one; a hardcoded "up to Ns" that's wrong
+// for the active backend is arguably worse, since it starts to look broken
+// once the wait blows past whatever number is printed. So: no promised
+// ceiling, just an honest running clock plus a backend-appropriate note
+// that gets more reassuring (not more alarming) the longer it runs.
+function startWaitTimer() {
+  const start = Date.now();
+  $("wait-note").textContent = "";
+  return setInterval(() => {
+    const secs = Math.floor((Date.now() - start) / 1000);
+    if (secs < 4) return;
+    let note = `Still thinking… (${secs}s)`;
+    if (currentBackend === "ollama") {
+      note += secs < 30
+        ? " — local model, this is normal"
+        : " — local models can take a while, especially the first question after starting Ollama; hang tight";
+    } else if (currentBackend === "gemini") {
+      note += secs < 20 ? " — usually done within 20s" : " — running a bit long, still working";
+    }
+    $("wait-note").textContent = note;
+  }, 1000);
+}
+function stopWaitTimer(timerId) {
+  clearInterval(timerId);
+  $("wait-note").textContent = "";
+}
+
+// ---- "Live tokens" streaming (2026-09-12) ----
+//
+// /visits/{id}/message/stream (kiosk-backend) proxies converse-module's SSE
+// event stream through unchanged — see that endpoint's docstring for the
+// full protocol. There's no EventSource here because EventSource can only
+// send GET requests; this is a POST with a body, so it's consumed by hand
+// via fetch()'s streaming response body instead. parseSseEvents() below
+// pulls complete "event: X\ndata: {...}\n\n" blocks out of the raw byte
+// stream as they accumulate — SSE frames aren't guaranteed to line up with
+// network chunk boundaries, so this buffers until it sees a full blank-line
+// terminator before handing a block back.
+//
+// Honest limitation, not a bug: the model still has to generate its ENTIRE
+// structured history object before it reaches the acknowledgement/question
+// text this streams (see stream_extract.py's docstring) — so the initial
+// wait before anything appears is NOT shorter than before. What changes is
+// the LAST stretch of a turn: once the model reaches the visible fields,
+// they type out progressively instead of appearing all at once.
+function parseSseBlock(raw) {
+  let event = "message", data = null;
+  for (const line of raw.split("\n")) {
+    if (line.startsWith("event:")) event = line.slice(6).trim();
+    else if (line.startsWith("data:")) {
+      try { data = JSON.parse(line.slice(5).trim()); } catch (e) { data = null; }
+    }
+  }
+  return { event, data };
+}
+
+async function sendMessage() {
+  const input = $("chat-input");
+  const text = input.value.trim();
+  if (!text) return;
+  addBubble("patient", text);
+  input.value = "";
+  input.disabled = true;
+  $("btn-send").disabled = true;
+  let thinkingBubble = addThinkingBubble();
+  const waitTimer = startWaitTimer();
+  const removeThinking = () => { removeThinkingBubble(thinkingBubble); thinkingBubble = null; };
+
+  let ackEl = null, questionEl = null;
+  try {
+    clearError();
+    const res = await fetch(`${API}/visits/${visitId}/message/stream`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }),
+    });
+    if (!res.ok || !res.body) {
+      let detail = res.statusText;
+      try { detail = (await res.json()).detail || detail; } catch (e) {}
+      showError(detail);
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = "";
+    let finalData = null;
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = buf.indexOf("\n\n")) !== -1) {
+        const { event, data } = parseSseBlock(buf.slice(0, sep));
+        buf = buf.slice(sep + 2);
+        if (data === null) continue;
+
+        if (event === "delta") {
+          if (thinkingBubble) { stopWaitTimer(waitTimer); removeThinking(); }
+          if (data.field === "acknowledgement") {
+            if (!ackEl) ackEl = startLiveBubble("ack");
+            ackEl.textContent += data.text;
+          } else if (data.field === "next_question") {
+            if (!questionEl) questionEl = startLiveBubble("assistant");
+            questionEl.textContent += data.text;
+          }
+          $("chat-log").scrollTop = $("chat-log").scrollHeight;
+        } else if (event === "replace") {
+          // Rare (ollama only): the streamed attempt was empty/invalid and
+          // got retried non-streamed server-side — overwrite whatever
+          // partial text was shown with the real result.
+          if (thinkingBubble) { stopWaitTimer(waitTimer); removeThinking(); }
+          if (data.acknowledgement) {
+            if (!ackEl) ackEl = startLiveBubble("ack");
+            ackEl.textContent = data.acknowledgement;
+          }
+          if (!questionEl) questionEl = startLiveBubble("assistant");
+          questionEl.textContent = data.next_question || "";
+        } else if (event === "final") {
+          finalData = data;
+        } else if (event === "error") {
+          showError(data.detail || "Something went wrong.");
+        }
+      }
+    }
+
+    if (!finalData) return; // an error event (if any) already showed feedback
+
+    patientTurnCount++;
+    $("progress-note").textContent = `Question ${patientTurnCount}`;
+
+    if (finalData.red_flag) {
+      showScreen("screen-urgent");
+      return;
+    }
+    if (finalData.complete) {
+      // Whatever streamed into questionEl on the final turn was a closing
+      // remark, not a real question (schema.py requires next_question to
+      // be non-empty even when complete=true) — drop it in favor of the
+      // one fixed message every backend's completion turn shows.
+      if (questionEl) { questionEl.remove(); questionEl = null; }
+      addBubble("assistant", "Thanks — that's everything we need for now.");
+      setTimeout(() => showScreen("screen-upload"), 900);
+    }
+    // else: the real question is already fully rendered via delta/replace above.
+  } catch (e) {
+    showError("Couldn't reach the kiosk backend. Is it running?");
+  } finally {
+    if (thinkingBubble) removeThinking();
+    stopWaitTimer(waitTimer);
+    input.disabled = false;
+    $("btn-send").disabled = false;
+    input.focus();
+  }
+}
+$("btn-send").onclick = sendMessage;
+$("chat-input").addEventListener("keydown", (e) => { if (e.key === "Enter") sendMessage(); });
+
+// ---- Voice input ----
+// Records a clip, sends it to the kiosk backend's /transcribe (which proxies
+// to the local Whisper voice module), and fills the text box with the
+// result — it does NOT auto-send. A patient (or a low-literacy patient
+// unsure the transcript is right) gets to see and correct what the model
+// heard before it becomes part of their clinical record, same principle as
+// every other "review before it's trusted" choice in this project.
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const micSupported = !!(SpeechRecognition || (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder));
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+let liveRecognition = null;
+
+if (!micSupported) {
+  $("btn-mic").style.display = "none";
+}
+
+async function startRecording() {
+  let stream = null;
+  try {
+    // Always request raw mic access first to guarantee permissions are granted
+    // and the microphone is warmed up. This prevents Chrome from silently 
+    // blocking or instantly ending the Web Speech API.
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (e) {
+    $("mic-status").textContent = "Couldn't access the microphone — please check your permissions.";
+    return;
+  }
+
+  // Function to handle backend recording fallback
+  async function startFallbackRecording() {
+    liveRecognition = null;
+    try {
+      const fbStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(fbStream);
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = handleRecordingStop;
+      mediaRecorder.start();
+      isRecording = true;
+      $("btn-mic").classList.add("recording");
+      $("mic-status").textContent = "Recording (backend)... tap the mic again when you're done.";
+      $("btn-send").disabled = true;
+    } catch (e) {
+      $("mic-status").textContent = "Couldn't access the microphone — please type your answer instead.";
+      isRecording = false;
+      $("btn-mic").classList.remove("recording");
+      $("btn-send").disabled = false;
+    }
+  }
+
+  if (SpeechRecognition) {
+    try {
+      liveRecognition = new SpeechRecognition();
+      liveRecognition.continuous = true;
+      liveRecognition.interimResults = true;
+      liveRecognition.lang = selectedLanguage === "hi" ? "hi-IN" : "en-US";
+      
+      let finalTranscript = $("chat-input").value;
+      
+      let hasHeardSpeech = false;
+      liveRecognition.onresult = (e) => {
+        hasHeardSpeech = true;
+        let interim = '';
+        let finalChunk = '';
+        for (let i = e.resultIndex; i < e.results.length; ++i) {
+          if (e.results[i].isFinal) finalChunk += e.results[i][0].transcript;
+          else interim += e.results[i][0].transcript;
+        }
+        finalTranscript += finalChunk;
+        $("chat-input").value = finalTranscript + interim;
+      };
+      
+      let speechError = null;
+      liveRecognition.onerror = (e) => {
+        console.warn("Speech recognition error:", e.error);
+        speechError = e.error;
+      };
+      
+      liveRecognition.onend = () => {
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        
+        // If it failed instantly (e.g. Brave network error), trigger fallback asynchronously
+        if (isRecording && !hasHeardSpeech && (speechError === 'network' || speechError === 'not-allowed' || speechError === 'audio-capture')) {
+          console.warn("Async speech error caught. Falling back to backend recorder.");
+          startFallbackRecording();
+          return;
+        }
+
+        if (isRecording) {
+          isRecording = false;
+          $("btn-mic").classList.remove("recording");
+          
+          if (speechError) {
+            $("mic-status").textContent = `Live transcribe failed (${speechError}). Are you using Chrome with internet?`;
+          } else if (!hasHeardSpeech) {
+            $("mic-status").textContent = `Live transcribe stopped instantly. Please use Google Chrome with an internet connection.`;
+          } else {
+            $("mic-status").textContent = "Heard: review it below, then tap Send.";
+          }
+          $("btn-send").disabled = false;
+        }
+      };
+      
+      liveRecognition.start();
+      isRecording = true;
+      $("btn-mic").classList.add("recording");
+      $("mic-status").textContent = "Listening live... tap the mic again when you're done.";
+      $("btn-send").disabled = true;
+      return;
+    } catch(err) {
+      console.warn("Live transcription failed synchronously, falling back.", err);
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      return startFallbackRecording();
+    }
+  }
+
+  // If no SpeechRecognition at all
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  startFallbackRecording();
+}
+
+function stopRecording() {
+  if (liveRecognition) {
+    liveRecognition.stop();
+    // onend handles the UI state
+    return;
+  }
+  if (!mediaRecorder) return;
+  mediaRecorder.stop();
+  mediaRecorder.stream.getTracks().forEach((t) => t.stop());
+  isRecording = false;
+  $("btn-mic").classList.remove("recording");
+  $("mic-status").textContent = "Transcribing…";
+}
+
+async function handleRecordingStop() {
+  const blob = new Blob(audioChunks, { type: "audio/webm" });
+  $("btn-mic").disabled = true;
+  try {
+    const fd = new FormData();
+    fd.append("file", blob, "clip.webm");
+    const result = await api(`/visits/${visitId}/transcribe`, { method: "POST", body: fd });
+    $("chat-input").value = result.text || "";
+    $("mic-status").textContent = result.text
+      ? "Heard: review it below, then tap Send."
+      : "Didn't catch that — please try again or type your answer.";
+    $("chat-input").focus();
+  } catch (e) {
+    $("mic-status").textContent = "Couldn't transcribe that — please type your answer instead.";
+  } finally {
+    $("btn-mic").disabled = false;
+    $("btn-send").disabled = false;
+  }
+}
+
+$("btn-mic").onclick = () => {
+  if (isRecording) stopRecording();
+  else startRecording();
+};
+
+// ---- Document upload ----
+
+$("btn-upload").onclick = async () => {
+  const fileInput = $("doc-file");
+  if (!fileInput.files.length) {
+    $("upload-status").textContent = "Choose a photo first.";
+    return;
+  }
+  $("btn-upload").disabled = true;
+  $("upload-status").textContent = "Reading document...";
+  try {
+    const fd = new FormData();
+    fd.append("file", fileInput.files[0]);
+    const hint = $("doc-type-hint").value;
+    if (hint) fd.append("document_type_hint", hint);
+    const doc = await api(`/visits/${visitId}/documents`, { method: "POST", body: fd });
+    renderDoc(doc);
+    fileInput.value = "";
+    $("upload-status").textContent = "Added.";
+  } catch (e) {
+    $("upload-status").textContent = "Couldn't read that document — try another photo.";
+  } finally {
+    $("btn-upload").disabled = false;
+  }
+};
+
+function renderDoc(doc) {
+  const ex = doc.extracted;
+  const div = document.createElement("div");
+  div.className = "doc-item";
+  div.innerHTML = `<span class="doc-title">${ex.document_type || "document"}${doc.filename ? " — " + doc.filename : ""}</span>` +
+    (ex.needs_review ? `<span class="badge">please verify</span>` : "");
+  $("doc-list").appendChild(div);
+}
+
+$("btn-skip-upload").onclick = () => goToSummary();
+$("btn-done-upload").onclick = () => goToSummary();
+
+// ---- Summary ----
+
+async function goToSummary() {
+  showScreen("screen-summary");
+  $("summary-body").innerHTML = "Loading...";
+  try {
+    const s = await api(`/visits/${visitId}/summary`);
+    $("summary-body").innerHTML = renderSummary(s);
+  } catch (e) {
+    $("summary-body").innerHTML = "Couldn't load your summary.";
+  }
+}
+
+function section(title, html) {
+  return `<div class="summary-section"><h3>${title}</h3><div class="value">${html}</div></div>`;
+}
+function list(items) {
+  if (!items || !items.length) return "<em>None reported</em>";
+  return `<ul class="plain">${items.map(i => `<li>${i}</li>`).join("")}</ul>`;
+}
+
+const TRIAGE_LABELS = { routine: "Routine", soon: "Soon", urgent: "Urgent", emergency: "Emergency" };
+
+function renderSummary(s) {
+  const h = s.history.history || {};
+  const hpi = h.hpi || {};
+  let out = "";
+  // triage_level is advisory queue-priority info from the intake engine,
+  // separate from red_flag (a red_flag visit never reaches this screen —
+  // it's diverted to screen-urgent instead, see sendMessage()). Only show
+  // this badge when it's something other than plain "routine" so the
+  // common case doesn't add visual noise.
+  const triage = s.history.triage_level;
+  if (triage && triage !== "routine") {
+    out += section("Priority", `<span class="avail-badge avail-no">${TRIAGE_LABELS[triage] || triage}</span>`);
+  }
+  out += section("Chief complaint", h.chief_complaint || "<em>Not recorded</em>");
+
+  const hpiParts = [];
+  if (hpi.onset) hpiParts.push(`Onset: ${hpi.onset}`);
+  if (hpi.character) hpiParts.push(`Character: ${hpi.character}`);
+  if (hpi.severity) hpiParts.push(`Severity: ${hpi.severity}`);
+  if (hpi.timing) hpiParts.push(`Timing: ${hpi.timing}`);
+  if (hpiParts.length) out += section("Symptom details", list(hpiParts));
+  if (hpi.associated_symptoms && hpi.associated_symptoms.length) out += section("Associated symptoms", list(hpi.associated_symptoms));
+
+  out += section("Past medical / surgical history", list(h.past_medical_surgical_history));
+  out += section("Current medications", list(h.current_medications));
+  out += section("Drug allergies", list(h.drug_allergy_history));
+  out += section("Family history", list(h.family_history));
+
+  if (h.ayush) {
+    const a = h.ayush;
+    const ayushParts = [];
+    if (a.prakriti) ayushParts.push(`Prakriti: ${a.prakriti}`);
+    if (a.vikriti) ayushParts.push(`Vikriti: ${a.vikriti}`);
+    if (a.agni) ayushParts.push(`Agni: ${a.agni}`);
+    if (a.koshtha) ayushParts.push(`Koshtha: ${a.koshtha}`);
+    if (ayushParts.length) out += section("AYUSH assessment (draft)", list(ayushParts));
+  }
+
+  if (s.documents && s.documents.length) {
+    const docHtml = s.documents.map(d => {
+      const ex = d.extracted;
+      const bits = [];
+      if (ex.presenting_complaints && ex.presenting_complaints.length) bits.push(`c/o ${ex.presenting_complaints.join(", ")}`);
+      if (ex.diagnoses && ex.diagnoses.length) bits.push(`Diagnosis: ${ex.diagnoses.join(", ")}`);
+      if (ex.medications && ex.medications.length) bits.push(`Meds: ${ex.medications.map(m => m.name).filter(Boolean).join(", ")}`);
+      const abnormal = (ex.investigations || []).filter(i => i.abnormal === true);
+      if (abnormal.length) bits.push(`<span class="abnormal">Abnormal: ${abnormal.map(i => `${i.name} ${i.value}${i.unit || ""}`).join(", ")}</span>`);
+      return `<li>${ex.document_type || "document"}${ex.document_date ? " (" + ex.document_date + ")" : ""}${bits.length ? " — " + bits.join(" · ") : ""}${ex.needs_review ? ' <span class="badge">please verify</span>' : ""}</li>`;
+    }).join("");
+    out += section("Documents shared", `<ul class="plain">${docHtml}</ul>`);
+  } else {
+    out += section("Documents shared", "<em>None</em>");
+  }
+
+  return out;
+}
+
+$("btn-confirm").onclick = () => {
+  $("done-heading").textContent = "Thank you";
+  $("visit-ref").textContent = visitToken || (visitId ? visitId.slice(0, 8) : "");
+  showScreen("screen-done");
+};
+
+$("btn-edit").onclick = () => {
+  // Take the user back to the chat screen
+  showScreen("screen-intake");
+  
+  // Optionally, we could pre-fill the chat box, but just letting them type is fine.
+  $("chat-input").focus();
+};
+
+$("btn-new-visit").onclick = () => {
+  visitId = null;
+  visitToken = null;
+  patientTurnCount = 0;
+  $("patient-name").value = "";
+  $("ayush-mode").checked = false;
+  $("doc-list").innerHTML = "";
+  $("upload-status").textContent = "";
+  $("mic-status").textContent = "";
+  selectedLanguage = "en";
+  document.querySelectorAll("#lang-row .lang-btn").forEach(b => b.classList.toggle("selected", b.dataset.lang === "en"));
+  clearError();
+  showScreen("screen-welcome");
+};
+
+loadBackendAvailability();
+</script>
+</body>
+</html>

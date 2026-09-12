@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>MediKiosk — Patient Check-In</title>
+<style>
+  :root {
+    --blue: #1a56db;
+    --blue-dark: #123a99;
+    --green: #0f7a3d;
+    --red: #b91c1c;
+    --grey: #6b7280;
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: #111827;
+  }
+  #app {
+    max-width: 720px; margin: 0 auto; min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header.kiosk-header {
+    padding: 18px 24px; background: var(--blue); color: white;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  header.kiosk-header h1 { font-size: 20px; margin: 0; font-weight: 600; }
+  header.kiosk-header .subtitle { font-size: 12px; opacity: 0.85; }
+  main { flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .screen { display: none; flex-direction: column; gap: 16px; }
+  .screen.active { display: flex; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px;
+  }
+  h2 { margin: 0 0 4px; font-size: 22px; }
+  p.lead { color: var(--grey); margin: 0 0 12px; font-size: 15px; }
+  label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 6px; }
+  input[type=text], select {
+    width: 100%; padding: 14px; font-size: 16px; border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 14px;
+  }
+  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .checkbox-row input { width: 20px; height: 20px; }
+  .checkbox-row label { margin: 0; font-weight: 500; }
+  button {
+    font-size: 16px; font-weight: 600; padding: 14px 22px; border-radius: 8px;
+    border: none; cursor: pointer; touch-action: manipulation;
+  }
+  button.primary { background: var(--blue); color: white; }
+  button.primary:hover { background: var(--blue-dark); }
+  button.secondary { background: #e5e7eb; color: #111827; }
+  button.big { width: 100%; padding: 18px; font-size: 18px; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+
+  button.lang-btn { background: #e5e7eb; color: #111827; padding: 12px; }
+  button.lang-btn.selected { background: var(--blue); color: white; }
+
+  details.settings { font-size: 13px; color: var(--grey); }
+  details.settings summary { cursor: pointer; padding: 6px 0; }
+  .avail-badge {
+    display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    margin-left: 6px; font-weight: 600;
+  }
+  .avail-yes { background: #dcfce7; color: var(--green); }
+  .avail-no { background: #fee2e2; color: var(--red); }
+
+  #chat-log { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; max-height: 55vh; overflow-y: auto; }
+  .bubble { max-width: 82%; padding: 12px 16px; border-radius: 16px; font-size: 16px; line-height: 1.4; }
+  .bubble.assistant { background: #eef2ff; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bubble.patient { background: var(--blue); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .bubble.ack { font-style: italic; color: var(--grey); background: none; padding: 0 4px; font-size: 13px; }
+  #progress-note { font-size: 12px; color: var(--grey); text-align: center; }
+  .bubble.thinking { display: flex; gap: 4px; align-items: center; }
+  .bubble.thinking span {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--blue);
+    opacity: 0.35; animation: dot-pulse 1.1s infinite;
+  }
+  .bubble.thinking span:nth-child(2) { animation-delay: 0.15s; }
+  .bubble.thinking span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes dot-pulse { 0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); } 40% { opacity: 1; transform: scale(1); } }
+  #wait-note { font-size: 12px; color: var(--grey); text-align: center; min-height: 16px; }
+
+  button.mic {
+    flex: 0 0 auto; width: 52px; height: 52px; padding: 0; border-radius: 50%;
+    background: #e5e7eb; color: #111827; font-size: 20px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  button.mic.recording { background: var(--red); color: white; animation: mic-pulse 1.2s infinite; }
+  @keyframes mic-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(185,28,28,0.5); } 50% { box-shadow: 0 0 0 10px rgba(185,28,28,0); } }
+  #mic-status { font-size: 12px; color: var(--grey); text-align: center; min-height: 16px; }
+
+  .urgent-screen { background: #fef2f2; border: 2px solid var(--red); border-radius: 12px; padding: 32px; text-align: center; }
+  .urgent-screen h2 { color: var(--red); font-size: 26px; }
+
+  .doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .doc-item { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+  .doc-item .doc-title { font-weight: 600; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #fef3c7; color: #92400e; margin-left: 6px; }
+
+  .summary-section { margin-bottom: 14px; }
+  .summary-section h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--grey); margin: 0 0 6px; }
+  .summary-section .value { font-size: 15px; }
+  ul.plain { margin: 4px 0; padding-left: 20px; }
+  .abnormal { color: var(--red); font-weight: 600; }
+
+  #error-banner {
+    display: none; background: #fee2e2; color: var(--red); padding: 12px 16px;
+    border-radius: 8px; font-size: 14px;
+  }
+  footer { text-align: center; font-size: 11px; color: var(--grey); padding: 14px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="kiosk-header">
+    <div>
+      <h1>MediKiosk</h1>
+      <div class="subtitle">Patient self check-in — prototype</div>
+    </div>
+    <div class="subtitle" id="header-status"></div>
+  </header>
+
+  <main>
+    <div id="error-banner"></div>
+
+    <!-- WELCOME -->
+    <section class="screen active" id="screen-welcome">
+      <div class="card">
+        <h2>Welcome</h2>
+        <p class="lead">Let's collect a few details before you see the doctor. This takes about 5 minutes.</p>
+
+        <label>Language / भाषा</label>
+        <div class="row" id="lang-row" style="margin-bottom:14px;">
+          <button type="button" class="lang-btn selected" data-lang="en">English</button>
+          <button type="button" class="lang-btn" data-lang="hi">हिन्दी</button>
+        </div>
+
+        <label for="patient-name">Your name (optional)</label>
+        <input type="text" id="patient-name" placeholder="e.g. Vivek S">
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="ayush-mode">
+          <label for="ayush-mode">I'm here for an Ayurveda / AYUSH consultation</label>
+        </div>
+
+        <details class="settings">
+          <summary>Kiosk settings (staff)</summary>
+          <label for="backend-select" style="margin-top:10px;">Intake engine</label>
+          <select id="backend-select">
+            <option value="auto">Auto (recommended)</option>
+            <option value="gemini">Gemini (cloud)</option>
+            <option value="ollama">Ollama (local, gemma4:12b)</option>
+            <option value="mock">Mock (offline demo script)</option>
+          </select>
+          <div id="backend-availability"></div>
+        </details>
+
+        <button class="primary big" id="btn-start" style="margin-top:14px;">Begin check-in</button>
+      </div>
+      <footer>Prototype for SIH26047 — not a certified medical device. All data is in-memory and cleared on restart.</footer>
+    </section>
+
+    <!-- INTAKE -->
+    <section class="screen" id="screen-intake">
+      <div class="card">
+        <h2>A few questions</h2>
+        <div id="progress-note"></div>
+        <div id="chat-log"></div>
+        <div id="wait-note"></div>
+        <div class="row">
+          <input type="text" id="chat-input" placeholder="Type your answer, or tap the mic to speak..." autocomplete="off">
+          <button class="mic" id="btn-mic" title="Speak your answer" style="flex:0 0 auto;">&#127908;</button>
+          <button class="primary" id="btn-send" style="flex:0 0 auto;">Send</button>
+        </div>
+        <div id="mic-status"></div>
+      </div>
+    </section>
+
+    <!-- URGENT -->
+    <section class="screen" id="screen-urgent">
+      <div class="urgent-screen">
+        <h2>Please tell the front desk staff now</h2>
+        <p>Based on what you told us, you should be seen right away. Please walk up to the reception desk — you do not need to wait for the kiosk.</p>
+      </div>
+    </section>
+
+    <!-- UPLOAD -->
+    <section class="screen" id="screen-upload">
+      <div class="card">
+        <h2>Prior documents</h2>
+        <p class="lead">If you have a photo of an old prescription, lab report, or discharge summary, you can share it now. This is optional.</p>
+
+        <label for="doc-type-hint">Document type (if known)</label>
+        <select id="doc-type-hint">
+          <option value="">Let the system decide</option>
+          <option value="prescription">Prescription</option>
+          <option value="lab_report">Lab report</option>
+          <option value="discharge_summary">Discharge summary</option>
+          <option value="other">Other</option>
+        </select>
+
+        <input type="file" id="doc-file" accept="image/*" capture="environment">
+        <button class="secondary" id="btn-upload" style="margin-top:6px;">Add document</button>
+        <div id="upload-status" style="font-size:13px; color:var(--grey); margin-top:8px;"></div>
+
+        <div class="doc-list" id="doc-list"></div>
+
+        <div class="row" style="margin-top:16px;">
+          <button class="secondary big" id="btn-skip-upload">No documents / Skip</button>
+          <button class="primary big" id="btn-done-upload">Done uploading</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="screen" id="screen-summary">
+      <div class="card">
+        <h2>Please confirm</h2>
+        <p class="lead">Here's what we recorded. Let the desk know if anything looks wrong.</p>
+        <div id="summary-body"></div>
+        <button class="primary big" id="btn-confirm" style="margin-top:10px;">This is correct — submit</button>
+      </div>
+    </section>
+
+    <!-- DONE -->
+    <section class="screen" id="screen-done">
+      <div class="card" style="text-align:center;">
+        <h2 id="done-heading">Thank you</h2>
+        <p class="lead">Please take a seat — you'll be called shortly.</p>
+        <p style="font-size:13px; color:var(--grey);">Visit reference: <strong id="visit-ref"></strong></p>
+        <button class="secondary big" id="btn-new-visit" style="margin-top:16px;">Start next patient</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const API = ""; // same-origin — this page is served by the kiosk backend itself
+let visitId = null;
+let ackPending = null;
+let currentBackend = null; // "gemini" | "ollama" | "mock" — set at visit start, used to set honest wait-timer copy
+let selectedLanguage = "en"; // "en" | "hi" — the language the interview is conducted in, picked on the welcome screen
+
+function $(id) { return document.getElementById(id); }
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+}
+
+function showError(msg) {
+  const el = $("error-banner");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+function clearError() {
+  $("error-banner").style.display = "none";
+}
+
+async function api(path, opts = {}) {
+  clearError();
+  let res;
+  try {
+    res = await fetch(API + path, opts);
+  } catch (e) {
+    showError("Couldn't reach the kiosk backend. Is it running?");
+    throw e;
+  }
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { detail = (await res.json()).detail || detail; } catch (e) {}
+    showError(detail);
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
+// ---- Welcome / backend availability ----
+
+async function loadBackendAvailability() {
+  try {
+    const data = await api("/backends");
+    const parts = [];
+    if (data.converse && !data.converse.error) {
+      parts.push(`Gemini${badge(data.converse.gemini && data.converse.gemini.available)} · Ollama${badge(data.converse.ollama && data.converse.ollama.available)}`);
+    } else {
+      parts.push(`<span class="avail-badge avail-no">intake service unreachable</span>`);
+    }
+    if (!data.ocr || data.ocr.error) {
+      parts.push(`<span class="avail-badge avail-no">scan service unreachable</span>`);
+    }
+    if (!data.voice || data.voice.error) {
+      parts.push(`<span class="avail-badge avail-no">voice service unreachable — mic hidden</span>`);
+      $("btn-mic").style.display = "none";
+    } else if (!data.voice.whisper || !data.voice.whisper.available) {
+      parts.push(`<span class="avail-badge avail-no">voice: mock only (no Whisper)</span>`);
+    }
+    $("backend-availability").innerHTML = parts.join(" &nbsp; ");
+  } catch (e) { /* error already shown */ }
+}
+function badge(ok) {
+  return ok ? `<span class="avail-badge avail-yes">available</span>` : `<span class="avail-badge avail-no">unavailable</span>`;
+}
+
+// ---- Language selection ----
+
+document.querySelectorAll("#lang-row .lang-btn").forEach(btn => {
+  btn.onclick = () => {
+    selectedLanguage = btn.dataset.lang;
+    document.querySelectorAll("#lang-row .lang-btn").forEach(b => b.classList.toggle("selected", b === btn));
+  };
+});
+
+// ---- Start visit ----
+
+$("btn-start").onclick = async () => {
+  $("btn-start").disabled = true;
+  try {
+    const body = {
+      patient_name: $("patient-name").value.trim() || null,
+      ayush_mode: $("ayush-mode").checked,
+      backend: $("backend-select").value,
+      language: selectedLanguage,
+    };
+    const data = await api("/visits", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    });
+    visitId = data.visit_id;
+    currentBackend = data.converse_backend || null;
+    $("header-status").textContent = data.converse_backend ? `engine: ${data.converse_backend}` : "";
+    $("chat-log").innerHTML = "";
+    $("mic-status").textContent = "";
+    addBubble("assistant", data.question);
+    showScreen("screen-intake");
+    $("chat-input").focus();
+  } catch (e) {
+    // error already shown
+  } finally {
+    $("btn-start").disabled = false;
+  }
+};
+
+// ---- Intake chat ----
+
+let patientTurnCount = 0;
+
+function addBubble(role, text) {
+  if (!text) return;
+  const div = document.createElement("div");
+  div.className = "bubble " + role;
+  div.textContent = text;
+  $("chat-log").appendChild(div);
+  $("chat-log").scrollTop = $("chat-log").scrollHeight;
+}
+function addAck(text) {
+  if (!text) return;
+  const div = document.createElement("div");
+  div.className = "bubble ack";
+  div.textContent = text;
+  $("chat-log").appendChild(div);
+}
+
+function addThinkingBubble() {
+  const div = document.createElement("div");
+  div.className = "bubble assistant thinking";
+  div.innerHTML = "<span></span><span></span><span></span>";
+  $("chat-log").appendChild(div);
+  $("chat-log").scrollTop = $("chat-log").scrollHeight;
+  return div;
+}
+function removeThinkingBubble(el) {
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+}
+
+// Every backend re-derives the whole clinical history each turn, not just
+// the next question, so this is never instant — and Gemini (10-20s) and
+// Ollama (varies a lot by hardware — can be well over a minute, especially
+// the first turn while the model loads into memory) have very different
+// honest expectations to set. Without feedback at all this reads as a
+// frozen page rather than a slow one; a hardcoded "up to Ns" that's wrong
+// for the active backend is arguably worse, since it starts to look broken
+// once the wait blows past whatever number is printed. So: no promised
+// ceiling, just an honest running clock plus a backend-appropriate note
+// that gets more reassuring (not more alarming) the longer it runs.
+function startWaitTimer() {
+  const start = Date.now();
+  $("wait-note").textContent = "";
+  return setInterval(() => {
+    const secs = Math.floor((Date.now() - start) / 1000);
+    if (secs < 4) return;
+    let note = `Still thinking… (${secs}s)`;
+    if (currentBackend === "ollama") {
+      note += secs < 30
+        ? " — local model, this is normal"
+        : " — local models can take a while, especially the first question after starting Ollama; hang tight";
+    } else if (currentBackend === "gemini") {
+      note += secs < 20 ? " — usually done within 20s" : " — running a bit long, still working";
+    }
+    $("wait-note").textContent = note;
+  }, 1000);
+}
+function stopWaitTimer(timerId) {
+  clearInterval(timerId);
+  $("wait-note").textContent = "";
+}
+
+async function sendMessage() {
+  const input = $("chat-input");
+  const text = input.value.trim();
+  if (!text) return;
+  addBubble("patient", text);
+  input.value = "";
+  input.disabled = true;
+  $("btn-send").disabled = true;
+  const thinkingBubble = addThinkingBubble();
+  const waitTimer = startWaitTimer();
+  try {
+    const result = await api(`/visits/${visitId}/message`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }),
+    });
+    patientTurnCount++;
+    $("progress-note").textContent = `Question ${patientTurnCount}`;
+
+    if (result.red_flag) {
+      showScreen("screen-urgent");
+      return;
+    }
+    addAck(result.acknowledgement);
+    if (result.complete) {
+      addBubble("assistant", "Thanks — that's everything we need for now.");
+      setTimeout(() => showScreen("screen-upload"), 900);
+    } else {
+      addBubble("assistant", result.question);
+    }
+  } catch (e) {
+    // error already shown; let them retry
+  } finally {
+    removeThinkingBubble(thinkingBubble);
+    stopWaitTimer(waitTimer);
+    input.disabled = false;
+    $("btn-send").disabled = false;
+    input.focus();
+  }
+}
+$("btn-send").onclick = sendMessage;
+$("chat-input").addEventListener("keydown", (e) => { if (e.key === "Enter") sendMessage(); });
+
+// ---- Voice input ----
+// Records a clip, sends it to the kiosk backend's /transcribe (which proxies
+// to the local Whisper voice module), and fills the text box with the
+// result — it does NOT auto-send. A patient (or a low-literacy patient
+// unsure the transcript is right) gets to see and correct what the model
+// heard before it becomes part of their clinical record, same principle as
+// every other "review before it's trusted" choice in this project.
+
+const micSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
+if (!micSupported) {
+  $("btn-mic").style.display = "none";
+}
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = handleRecordingStop;
+    mediaRecorder.start();
+    isRecording = true;
+    $("btn-mic").classList.add("recording");
+    $("mic-status").textContent = "Recording… tap the mic again when you're done.";
+    $("btn-send").disabled = true;
+  } catch (e) {
+    $("mic-status").textContent = "Couldn't access the microphone — please type your answer instead.";
+  }
+}
+
+function stopRecording() {
+  if (!mediaRecorder) return;
+  mediaRecorder.stop();
+  mediaRecorder.stream.getTracks().forEach((t) => t.stop());
+  isRecording = false;
+  $("btn-mic").classList.remove("recording");
+  $("mic-status").textContent = "Transcribing…";
+}
+
+async function handleRecordingStop() {
+  const blob = new Blob(audioChunks, { type: "audio/webm" });
+  $("btn-mic").disabled = true;
+  try {
+    const fd = new FormData();
+    fd.append("file", blob, "clip.webm");
+    const result = await api(`/visits/${visitId}/transcribe`, { method: "POST", body: fd });
+    $("chat-input").value = result.text || "";
+    $("mic-status").textContent = result.text
+      ? "Heard: review it below, then tap Send."
+      : "Didn't catch that — please try again or type your answer.";
+    $("chat-input").focus();
+  } catch (e) {
+    $("mic-status").textContent = "Couldn't transcribe that — please type your answer instead.";
+  } finally {
+    $("btn-mic").disabled = false;
+    $("btn-send").disabled = false;
+  }
+}
+
+$("btn-mic").onclick = () => {
+  if (isRecording) stopRecording();
+  else startRecording();
+};
+
+// ---- Document upload ----
+
+$("btn-upload").onclick = async () => {
+  const fileInput = $("doc-file");
+  if (!fileInput.files.length) {
+    $("upload-status").textContent = "Choose a photo first.";
+    return;
+  }
+  $("btn-upload").disabled = true;
+  $("upload-status").textContent = "Reading document...";
+  try {
+    const fd = new FormData();
+    fd.append("file", fileInput.files[0]);
+    const hint = $("doc-type-hint").value;
+    if (hint) fd.append("document_type_hint", hint);
+    const doc = await api(`/visits/${visitId}/documents`, { method: "POST", body: fd });
+    renderDoc(doc);
+    fileInput.value = "";
+    $("upload-status").textContent = "Added.";
+  } catch (e) {
+    $("upload-status").textContent = "Couldn't read that document — try another photo.";
+  } finally {
+    $("btn-upload").disabled = false;
+  }
+};
+
+function renderDoc(doc) {
+  const ex = doc.extracted;
+  const div = document.createElement("div");
+  div.className = "doc-item";
+  div.innerHTML = `<span class="doc-title">${ex.document_type || "document"}${doc.filename ? " — " + doc.filename : ""}</span>` +
+    (ex.needs_review ? `<span class="badge">please verify</span>` : "");
+  $("doc-list").appendChild(div);
+}
+
+$("btn-skip-upload").onclick = () => goToSummary();
+$("btn-done-upload").onclick = () => goToSummary();
+
+// ---- Summary ----
+
+async function goToSummary() {
+  showScreen("screen-summary");
+  $("summary-body").innerHTML = "Loading...";
+  try {
+    const s = await api(`/visits/${visitId}/summary`);
+    $("summary-body").innerHTML = renderSummary(s);
+  } catch (e) {
+    $("summary-body").innerHTML = "Couldn't load your summary.";
+  }
+}
+
+function section(title, html) {
+  return `<div class="summary-section"><h3>${title}</h3><div class="value">${html}</div></div>`;
+}
+function list(items) {
+  if (!items || !items.length) return "<em>None reported</em>";
+  return `<ul class="plain">${items.map(i => `<li>${i}</li>`).join("")}</ul>`;
+}
+
+const TRIAGE_LABELS = { routine: "Routine", soon: "Soon", urgent: "Urgent", emergency: "Emergency" };
+
+function renderSummary(s) {
+  const h = s.history.history || {};
+  const hpi = h.hpi || {};
+  let out = "";
+  // triage_level is advisory queue-priority info from the intake engine,
+  // separate from red_flag (a red_flag visit never reaches this screen —
+  // it's diverted to screen-urgent instead, see sendMessage()). Only show
+  // this badge when it's something other than plain "routine" so the
+  // common case doesn't add visual noise.
+  const triage = s.history.triage_level;
+  if (triage && triage !== "routine") {
+    out += section("Priority", `<span class="avail-badge avail-no">${TRIAGE_LABELS[triage] || triage}</span>`);
+  }
+  out += section("Chief complaint", h.chief_complaint || "<em>Not recorded</em>");
+
+  const hpiParts = [];
+  if (hpi.onset) hpiParts.push(`Onset: ${hpi.onset}`);
+  if (hpi.character) hpiParts.push(`Character: ${hpi.character}`);
+  if (hpi.severity) hpiParts.push(`Severity: ${hpi.severity}`);
+  if (hpi.timing) hpiParts.push(`Timing: ${hpi.timing}`);
+  if (hpiParts.length) out += section("Symptom details", list(hpiParts));
+  if (hpi.associated_symptoms && hpi.associated_symptoms.length) out += section("Associated symptoms", list(hpi.associated_symptoms));
+
+  out += section("Past medical / surgical history", list(h.past_medical_surgical_history));
+  out += section("Current medications", list(h.current_medications));
+  out += section("Drug allergies", list(h.drug_allergy_history));
+  out += section("Family history", list(h.family_history));
+
+  if (h.ayush) {
+    const a = h.ayush;
+    const ayushParts = [];
+    if (a.prakriti) ayushParts.push(`Prakriti: ${a.prakriti}`);
+    if (a.vikriti) ayushParts.push(`Vikriti: ${a.vikriti}`);
+    if (a.agni) ayushParts.push(`Agni: ${a.agni}`);
+    if (a.koshtha) ayushParts.push(`Koshtha: ${a.koshtha}`);
+    if (ayushParts.length) out += section("AYUSH assessment (draft)", list(ayushParts));
+  }
+
+  if (s.documents && s.documents.length) {
+    const docHtml = s.documents.map(d => {
+      const ex = d.extracted;
+      const bits = [];
+      if (ex.presenting_complaints && ex.presenting_complaints.length) bits.push(`c/o ${ex.presenting_complaints.join(", ")}`);
+      if (ex.diagnoses && ex.diagnoses.length) bits.push(`Diagnosis: ${ex.diagnoses.join(", ")}`);
+      if (ex.medications && ex.medications.length) bits.push(`Meds: ${ex.medications.map(m => m.name).filter(Boolean).join(", ")}`);
+      const abnormal = (ex.investigations || []).filter(i => i.abnormal === true);
+      if (abnormal.length) bits.push(`<span class="abnormal">Abnormal: ${abnormal.map(i => `${i.name} ${i.value}${i.unit || ""}`).join(", ")}</span>`);
+      return `<li>${ex.document_type || "document"}${ex.document_date ? " (" + ex.document_date + ")" : ""}${bits.length ? " — " + bits.join(" · ") : ""}${ex.needs_review ? ' <span class="badge">please verify</span>' : ""}</li>`;
+    }).join("");
+    out += section("Documents shared", `<ul class="plain">${docHtml}</ul>`);
+  } else {
+    out += section("Documents shared", "<em>None</em>");
+  }
+
+  return out;
+}
+
+$("btn-confirm").onclick = () => {
+  $("done-heading").textContent = "Thank you";
+  $("visit-ref").textContent = visitId ? visitId.slice(0, 8) : "";
+  showScreen("screen-done");
+};
+
+$("btn-new-visit").onclick = () => {
+  visitId = null;
+  patientTurnCount = 0;
+  $("patient-name").value = "";
+  $("ayush-mode").checked = false;
+  $("doc-list").innerHTML = "";
+  $("upload-status").textContent = "";
+  $("mic-status").textContent = "";
+  selectedLanguage = "en";
+  document.querySelectorAll("#lang-row .lang-btn").forEach(b => b.classList.toggle("selected", b.dataset.lang === "en"));
+  clearError();
+  showScreen("screen-welcome");
+};
+
+loadBackendAvailability();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{# Screen 1 of 5 — see templates/index.html for how these are assembled.
+   This file is ONLY the markup for this one step; the shared CSS/JS live in
+   index.html because they're used by every screen, not because this split
+   is incomplete. #}
+<section class="screen active" id="screen-welcome">
+  <div class="card">
+    <h2>Welcome</h2>
+    <p class="lead">Let's collect a few details before you see the doctor. This takes about 5 minutes.</p>
+
+    <label>Language / भाषा</label>
+    <div class="row" id="lang-row" style="margin-bottom:14px;">
+      <button type="button" class="lang-btn selected" data-lang="en">English</button>
+      <button type="button" class="lang-btn" data-lang="hi">हिन्दी</button>
+    </div>
+
+    <label for="patient-name">Your name (optional)</label>
+    <input type="text" id="patient-name" placeholder="e.g. Vivek S">
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="ayush-mode">
+      <label for="ayush-mode">I'm here for an Ayurveda / AYUSH consultation</label>
+    </div>
+
+    <details class="settings">
+      <summary>Kiosk settings (staff)</summary>
+      <label for="backend-select" style="margin-top:10px;">Intake engine</label>
+      <select id="backend-select">
+        <option value="auto">Auto (recommended)</option>
+        <option value="gemini">Gemini (cloud)</option>
+        <option value="ollama" id="ollama-option">Ollama (local)</option>
+        <option value="mock">Mock (offline, no network)</option>
+      </select>
+      <div id="backend-availability"></div>
+    </details>
+
+    <button class="primary big" id="btn-start" style="margin-top:14px;">Begin check-in</button>
+  </div>
+  <footer>MediKiosk is a screening aid, not a certified medical device — your clinician makes the actual diagnosis.</footer>
+</section>

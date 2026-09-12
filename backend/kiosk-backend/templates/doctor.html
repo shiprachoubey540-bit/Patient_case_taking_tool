@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediKiosk — Staff View</title>
+<style>
+  :root {
+    --primary: #0f766e; --primary-dark: #0c5c56; --primary-light: #f0fdfa; --success: #16a34a; --red: #b91c1c;
+    --orange: #92400e; --grey: #5f7371; --bg: #f6faf9; --card: #ffffff; --border: #dfe9e6;
+    --shadow-sm: 0 1px 2px rgba(15, 60, 55, 0.05);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: #143331;
+    -webkit-font-smoothing: antialiased;
+  }
+  #app { max-width: 960px; margin: 0 auto; padding: 0 16px 40px; }
+  header.kiosk-header {
+    padding: 20px 24px; margin: 0 -16px 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  }
+  header.kiosk-header h1 { font-size: 19px; margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+  header.kiosk-header .subtitle { font-size: 12px; opacity: 0.85; }
+  .no-auth-banner {
+    background: #fef3c7; border: 1px solid #f5c667; color: #92400e;
+    border-radius: 10px; padding: 12px 16px; font-size: 13px; margin-bottom: 20px; line-height: 1.5;
+  }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+  h2 { margin: 0 0 4px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  p.lead { color: var(--grey); margin: 0 0 14px; font-size: 13px; }
+  .row { display: flex; gap: 10px; }
+  input[type=text] {
+    flex: 1; padding: 12px 14px; font-size: 16px; border: 1px solid var(--border);
+    border-radius: 10px; text-transform: uppercase; letter-spacing: 2px; font-family: monospace;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+  button {
+    font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 10px;
+    border: none; cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  button.primary { background: var(--primary); color: white; }
+  button.primary:hover { background: var(--primary-dark); }
+  button.secondary { background: #eaf5f3; color: #143331; }
+  button.secondary:hover { background: #d9ebe8; }
+  #lookup-error { color: var(--red); font-size: 13px; margin-top: 8px; }
+  #lookup-result { margin-top: 16px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--grey); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+  td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr.row-emergency { background: #fef2f2; }
+  tr.row-urgent { background: #fffbeb; }
+  tr:hover { background: #f2f9f7; }
+  tr.row-emergency:hover, tr.row-urgent:hover { filter: brightness(0.98); }
+  .token-cell { font-family: monospace; font-weight: 700; letter-spacing: 1px; cursor: pointer; color: var(--primary); }
+  .token-cell:hover { text-decoration: underline; }
+  .badge { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+  .badge-emergency { background: #fee2e2; color: var(--red); }
+  .badge-urgent { background: #fef3c7; color: var(--orange); }
+  .badge-soon { background: var(--primary-light); color: var(--primary-dark); }
+  .badge-routine { background: #eaf5f3; color: var(--grey); }
+  .badge-incomplete { background: #eaf5f3; color: var(--grey); }
+  .muted { color: var(--grey); font-size: 12px; }
+  .empty-note { color: var(--grey); font-size: 13px; padding: 20px 0; text-align: center; }
+
+  .detail-section { margin-bottom: 12px; }
+  .detail-section h4 { margin: 0 0 4px; font-size: 13px; color: var(--grey); text-transform: uppercase; }
+  .detail-section .value { font-size: 15px; }
+  ul.plain { margin: 4px 0; padding-left: 18px; }
+  #refresh-note { font-size: 12px; color: var(--grey); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="kiosk-header">
+    <h1>MediKiosk — Staff View</h1>
+    <div class="subtitle">Visit lookup &amp; queue</div>
+  </header>
+
+  <div class="no-auth-banner">
+    <strong>No staff login is enforced on this page yet.</strong> Anyone who can reach this URL can see every
+    visit recorded here. Fine for a kiosk on a trusted local network during a pilot; do not expose this past
+    that without adding real access control first.
+  </div>
+
+  <div class="card">
+    <h2>Look up a visit</h2>
+    <p class="lead">Enter the code the patient was given at check-in.</p>
+    <div class="row">
+      <input type="text" id="lookup-input" maxlength="6" placeholder="e.g. A7K2M9" autocomplete="off">
+      <button class="primary" id="btn-lookup">Look up</button>
+    </div>
+    <div id="lookup-error"></div>
+    <div id="lookup-result"></div>
+  </div>
+
+  <div class="card">
+    <h2>Queue</h2>
+    <p class="lead">Most urgent first, then most recently updated. Click a code to open it above.</p>
+    <div id="refresh-note" class="muted"></div>
+    <div id="queue-body"><div class="empty-note">Loading…</div></div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const API = ""; // same-origin — served by the kiosk backend itself
+
+async function api(path) {
+  const res = await fetch(path);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.detail || `${res.status}`);
+  }
+  return res.json();
+}
+
+const TRIAGE_LABELS = { emergency: "Emergency", urgent: "Urgent", soon: "Soon", routine: "Routine" };
+
+function statusBadge(row) {
+  if (row.red_flag) return `<span class="badge badge-emergency">Red flag</span>`;
+  if (row.triage_level) return `<span class="badge badge-${row.triage_level}">${TRIAGE_LABELS[row.triage_level] || row.triage_level}</span>`;
+  if (!row.complete) return `<span class="badge badge-incomplete">In progress</span>`;
+  return `<span class="badge badge-routine">Routine</span>`;
+}
+
+function rowClass(row) {
+  if (row.red_flag || row.triage_level === "emergency") return "row-emergency";
+  if (row.triage_level === "urgent") return "row-urgent";
+  return "";
+}
+
+function timeAgo(ts) {
+  const s = Math.max(0, Math.round(Date.now() / 1000 - ts));
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.round(s / 60)}m ago`;
+  return `${Math.round(s / 3600)}h ago`;
+}
+
+async function loadQueue() {
+  try {
+    const rows = await api("/doctor/visits");
+    $("refresh-note").textContent = `${rows.length} visit(s) — refreshes automatically`;
+    if (!rows.length) {
+      $("queue-body").innerHTML = `<div class="empty-note">No visits yet.</div>`;
+      return;
+    }
+    const body = rows.map(r => `
+      <tr class="${rowClass(r)}">
+        <td class="token-cell" data-token="${r.token}">${r.token}</td>
+        <td>${r.patient_name || "<em>—</em>"}</td>
+        <td>${r.chief_complaint || "<em>—</em>"}</td>
+        <td>${statusBadge(r)}</td>
+        <td class="muted">${timeAgo(r.updated_at)}</td>
+      </tr>
+    `).join("");
+    $("queue-body").innerHTML = `
+      <table>
+        <thead><tr><th>Code</th><th>Patient</th><th>Chief complaint</th><th>Status</th><th>Updated</th></tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    `;
+    document.querySelectorAll(".token-cell").forEach(cell => {
+      cell.onclick = () => { $("lookup-input").value = cell.dataset.token; lookup(); };
+    });
+  } catch (e) {
+    $("queue-body").innerHTML = `<div class="empty-note">Couldn't load the queue — is the kiosk backend running?</div>`;
+  }
+}
+
+function section(title, html) {
+  return `<div class="detail-section"><h4>${title}</h4><div class="value">${html}</div></div>`;
+}
+function list(items) {
+  if (!items || !items.length) return "<em>None reported</em>";
+  return `<ul class="plain">${items.map(i => `<li>${i}</li>`).join("")}</ul>`;
+}
+
+function renderDetail(data) {
+  const v = data.visit;
+  const h = (data.history && data.history.history) || {};
+  const hpi = h.hpi || {};
+  let out = `<div class="card" style="background:var(--bg);">`;
+  out += `<div class="muted" style="margin-bottom:10px;">
+    Code <strong>${v.token}</strong> · ${v.patient_name || "no name given"} ·
+    ${data.live ? "live data" : "<strong>last saved snapshot</strong> (this visit's live session isn't reachable right now)"}
+  </div>`;
+  if (v.red_flag) out += section("Status", `<span class="badge badge-emergency">Red flag: ${data.history.red_flag_reason || ""}</span>`);
+  else if (v.triage_level) out += section("Priority", `<span class="badge badge-${v.triage_level}">${TRIAGE_LABELS[v.triage_level] || v.triage_level}</span>`);
+  out += section("Chief complaint", h.chief_complaint || "<em>Not recorded</em>");
+
+  const hpiParts = [];
+  if (hpi.onset) hpiParts.push(`Onset: ${hpi.onset}`);
+  if (hpi.character) hpiParts.push(`Character: ${hpi.character}`);
+  if (hpi.severity) hpiParts.push(`Severity: ${hpi.severity}`);
+  if (hpi.timing) hpiParts.push(`Timing: ${hpi.timing}`);
+  if (hpiParts.length) out += section("Symptom details", list(hpiParts));
+  if (hpi.associated_symptoms && hpi.associated_symptoms.length) out += section("Associated symptoms", list(hpi.associated_symptoms));
+
+  out += section("Past medical / surgical history", list(h.past_medical_surgical_history));
+  out += section("Current medications", list(h.current_medications));
+  out += section("Drug allergies", list(h.drug_allergy_history));
+  out += section("Family history", list(h.family_history));
+
+  if (data.documents && data.documents.length) {
+    const docHtml = data.documents.map(d => {
+      const ex = d.extracted || {};
+      return `<li>${ex.document_type || "document"}${ex.document_date ? " (" + ex.document_date + ")" : ""}</li>`;
+    }).join("");
+    out += section("Documents shared", `<ul class="plain">${docHtml}</ul>`);
+  }
+
+  out += `</div>`;
+  return out;
+}
+
+async function lookup() {
+  const code = $("lookup-input").value.trim();
+  $("lookup-error").textContent = "";
+  $("lookup-result").innerHTML = "";
+  if (!code) return;
+  try {
+    const data = await api(`/doctor/visits/${encodeURIComponent(code)}`);
+    $("lookup-result").innerHTML = renderDetail(data);
+  } catch (e) {
+    $("lookup-error").textContent = "No visit found for that code.";
+  }
+}
+
+$("btn-lookup").onclick = lookup;
+$("lookup-input").addEventListener("keydown", (e) => { if (e.key === "Enter") lookup(); });
+
+loadQueue();
+setInterval(loadQueue, 10000);
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{# Screen 3 of 5 — optional document photo upload. #}
+<section class="screen" id="screen-upload">
+  <div class="card">
+    <h2>Prior documents</h2>
+    <p class="lead">If you have a photo of an old prescription, lab report, or discharge summary, you can share it now. This is optional.</p>
+
+    <label for="doc-type-hint">Document type (if known)</label>
+    <select id="doc-type-hint">
+      <option value="">Let the system decide</option>
+      <option value="prescription">Prescription</option>
+      <option value="lab_report">Lab report</option>
+      <option value="discharge_summary">Discharge summary</option>
+      <option value="other">Other</option>
+    </select>
+
+    <input type="file" id="doc-file" accept="image/*" capture="environment">
+    <button class="secondary" id="btn-upload" style="margin-top:6px;">Add document</button>
+    <div id="upload-status" style="font-size:13px; color:var(--muted); margin-top:8px;"></div>
+
+    <div class="doc-list" id="doc-list"></div>
+
+    <div class="row" style="margin-top:16px;">
+      <button class="secondary big" id="btn-skip-upload">No documents / Skip</button>
+      <button class="primary big" id="btn-done-upload">Done uploading</button>
+    </div>
+  </div>
+</section>
