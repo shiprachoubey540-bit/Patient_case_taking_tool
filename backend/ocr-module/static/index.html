@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediKiosk Scan — test harness</title>
+<style>
+  :root {
+    --bg:#f5f6f3; --surface:#fff; --ink:#16211d; --ink-soft:#4b5a53; --border:#d9ddd3;
+    --teal:#0f6e63; --teal-soft:#e2efec; --red:#a3352c; --red-soft:#f5e3e0;
+    --saffron:#ad6e1c; --saffron-soft:#f6ead4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#101613; --surface:#161f1a; --ink:#eef2ee; --ink-soft:#a9b6ae; --border:#2a352e;
+      --teal:#4db8a6; --teal-soft:#16302c; --red:#e08079; --red-soft:#3a2220;
+      --saffron:#e0a24a; --saffron-soft:#322715; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui, sans-serif; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 14px; margin: 0 0 10px; color: var(--ink-soft); font-weight: 600; }
+  .sub { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 20px; }
+  .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .setup { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  label { font-size: 13.5px; color: var(--ink-soft); display: flex; gap: 6px; align-items: center; }
+  select, input[type=text], input[type=file] { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+  button { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--teal); background: var(--teal-soft); color: var(--teal); cursor: pointer; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 100px; border: 1px solid var(--border); color: var(--ink-soft); }
+  .badge.review { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+  .badge.ok { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+  pre { font-size: 12px; white-space: pre-wrap; word-break: break-word; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; max-height: 420px; overflow-y: auto; margin: 0; }
+  .err { background: var(--red-soft); color: var(--red); padding: 8px 12px; border-radius: 8px; font-size: 13px; margin-top: 10px; display:none; }
+  .doc-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; cursor: pointer; }
+  .doc-row:last-child { border-bottom: none; }
+  .doc-row:hover { color: var(--teal); }
+  .thumb { max-width: 160px; max-height: 160px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; display: block; }
+  .timeline-entry { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .timeline-entry:last-child { border-bottom: none; }
+  .abn { color: var(--red); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MediKiosk — Document OCR (test harness)</h1>
+  <p class="sub">Bare test page for this module only — not the real kiosk UI. Upload a photo of a prescription/lab report/discharge summary and watch the structured extraction on the right.</p>
+
+  <div class="panel">
+    <h2>Upload</h2>
+    <div class="setup">
+      <input type="file" id="file" accept="image/*">
+      <label>Type hint:
+        <select id="docType">
+          <option value="">(let the model decide)</option>
+          <option value="prescription">Prescription</option>
+          <option value="lab_report">Lab report</option>
+          <option value="discharge_summary">Discharge summary</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>Model:
+        <select id="backend">
+          <option value="auto">Auto (server default)</option>
+          <option value="gemini">Gemini (cloud)</option>
+          <option value="mock">Mock (scripted, offline)</option>
+        </select>
+      </label>
+      <label>Session ID: <input type="text" id="sessionId" placeholder="optional, groups documents" value="test-session"></label>
+      <button id="upload">Extract</button>
+    </div>
+    <img id="thumb" class="thumb" style="display:none">
+    <div id="uploadError" class="err"></div>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="panel">
+        <h2>Extracted document</h2>
+        <pre id="resultJson">{}</pre>
+      </div>
+      <div class="panel">
+        <h2>Documents in this session <button id="refreshDocs" style="float:right; padding:2px 8px; font-size:12px;">refresh</button></h2>
+        <div id="docList" class="sub">No documents yet.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Timeline <button id="refreshTimeline" style="float:right; padding:2px 8px; font-size:12px;">refresh</button></h2>
+      <div id="timeline" class="sub">Upload a document to see it here.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('file');
+const docTypeSelect = document.getElementById('docType');
+const backendSelect = document.getElementById('backend');
+const sessionIdInput = document.getElementById('sessionId');
+const uploadBtn = document.getElementById('upload');
+const thumb = document.getElementById('thumb');
+const uploadError = document.getElementById('uploadError');
+const resultJson = document.getElementById('resultJson');
+const docList = document.getElementById('docList');
+const timelineEl = document.getElementById('timeline');
+
+fileInput.addEventListener('change', () => {
+  const f = fileInput.files[0];
+  if (!f) { thumb.style.display = 'none'; return; }
+  thumb.src = URL.createObjectURL(f);
+  thumb.style.display = 'block';
+});
+
+async function refreshBackendAvailability() {
+  try {
+    const res = await fetch('/backends');
+    const data = await res.json();
+    for (const opt of backendSelect.options) {
+      if (opt.value === 'gemini') {
+        opt.textContent = data.gemini.available ? `Gemini (cloud) — ${data.gemini.model}` : 'Gemini (cloud) — no API key set';
+        opt.disabled = !data.gemini.available;
+      }
+    }
+  } catch (e) { /* leave as-is */ }
+}
+refreshBackendAvailability();
+
+uploadBtn.addEventListener('click', async () => {
+  const f = fileInput.files[0];
+  if (!f) { uploadError.textContent = 'Choose a file first.'; uploadError.style.display = 'block'; return; }
+  uploadError.style.display = 'none';
+  uploadBtn.disabled = true;
+
+  const form = new FormData();
+  form.append('file', f);
+  if (docTypeSelect.value) form.append('document_type_hint', docTypeSelect.value);
+  if (sessionIdInput.value) form.append('session_id', sessionIdInput.value);
+  form.append('backend', backendSelect.value);
+
+  const res = await fetch('/documents', { method: 'POST', body: form });
+  uploadBtn.disabled = false;
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    uploadError.textContent = err.detail || `Upload failed (HTTP ${res.status})`;
+    uploadError.style.display = 'block';
+    await refreshBackendAvailability();
+    return;
+  }
+
+  const data = await res.json();
+  resultJson.textContent = JSON.stringify(data, null, 2);
+  await loadDocs();
+  await loadTimeline();
+});
+
+async function loadDocs() {
+  const sid = sessionIdInput.value;
+  const url = sid ? `/documents?session_id=${encodeURIComponent(sid)}` : '/documents';
+  const res = await fetch(url);
+  const docs = await res.json();
+  if (!docs.length) { docList.textContent = 'No documents yet.'; return; }
+  docList.innerHTML = '';
+  for (const d of docs) {
+    const row = document.createElement('div');
+    row.className = 'doc-row';
+    const badge = d.extracted.needs_review
+      ? '<span class="badge review">needs review</span>'
+      : '<span class="badge ok">ok</span>';
+    row.innerHTML = `<span>${d.filename || d.id} — ${d.extracted.document_type || 'unclassified'}</span>${badge}`;
+    row.addEventListener('click', () => { resultJson.textContent = JSON.stringify(d, null, 2); });
+    docList.appendChild(row);
+  }
+}
+
+async function loadTimeline() {
+  const sid = sessionIdInput.value;
+  const url = sid ? `/timeline?session_id=${encodeURIComponent(sid)}` : '/timeline';
+  const res = await fetch(url);
+  const entries = await res.json();
+  if (!entries.length) { timelineEl.textContent = 'Upload a document to see it here.'; return; }
+  timelineEl.innerHTML = '';
+  for (const e of entries) {
+    const div = document.createElement('div');
+    div.className = 'timeline-entry';
+    const dateLabel = e.date_source === 'document_date' ? (e.document_date || '(dated)') : 'undated — sorted by upload order';
+    const abn = e.abnormal_investigations.length
+      ? `<div class="abn">${e.abnormal_investigations.map(i => `⚠ ${i.name}: ${i.value} ${i.unit || ''}`).join('<br>')}</div>`
+      : '';
+    div.innerHTML = `<strong>${e.document_type || 'unclassified'}</strong> — ${dateLabel}${e.needs_review ? ' <span class="badge review">needs review</span>' : ''}${abn}`;
+    timelineEl.appendChild(div);
+  }
+}
+
+document.getElementById('refreshDocs').addEventListener('click', loadDocs);
+document.getElementById('refreshTimeline').addEventListener('click', loadTimeline);
+</script>
+</body>
+</html>
