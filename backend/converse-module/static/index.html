@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediKiosk Converse — test harness</title>
+<style>
+  :root {
+    --bg:#f5f6f3; --surface:#fff; --ink:#16211d; --ink-soft:#4b5a53; --border:#d9ddd3;
+    --teal:#0f6e63; --teal-soft:#e2efec; --red:#a3352c; --red-soft:#f5e3e0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#101613; --surface:#161f1a; --ink:#eef2ee; --ink-soft:#a9b6ae; --border:#2a352e;
+      --teal:#4db8a6; --teal-soft:#16302c; --red:#e08079; --red-soft:#3a2220; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui, sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 20px; }
+  .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .setup { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  label { font-size: 13.5px; color: var(--ink-soft); display: flex; gap: 6px; align-items: center; }
+  button { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--teal); background: var(--teal-soft); color: var(--teal); cursor: pointer; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  #chat { height: 420px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; background: var(--bg); }
+  .msg { max-width: 80%; padding: 8px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+  .msg.assistant { background: var(--surface); border: 1px solid var(--border); }
+  .msg.patient { background: var(--teal-soft); color: var(--teal); margin-left: auto; }
+  .msg.system { background: var(--red-soft); color: var(--red); font-weight: 600; }
+  .row { display: flex; gap: 8px; }
+  input[type=text] { flex: 1; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font: inherit; }
+  pre { font-size: 12px; white-space: pre-wrap; word-break: break-word; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; height: 500px; overflow-y: auto; }
+  .flag { background: var(--red-soft); color: var(--red); padding: 8px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 10px; display:none; }
+  select { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+  select option:disabled { color: var(--ink-soft); }
+  .badge { font-size: 12px; padding: 3px 9px; border-radius: 100px; border: 1px solid var(--border); color: var(--ink-soft); }
+  .badge.on { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+  .err { background: var(--red-soft); color: var(--red); padding: 8px 12px; border-radius: 8px; font-size: 13px; margin-top: 10px; display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MediKiosk — Conversational History Engine (test harness)</h1>
+  <p class="sub">This is a bare test page for this module only — not the real kiosk UI. It exists so you can try the interview loop and watch the structured JSON build up on the right.</p>
+
+  <div class="setup">
+    <label><input type="checkbox" id="ayush"> AYUSH mode</label>
+    <label>Model:
+      <select id="backend">
+        <option value="auto">Auto (server default)</option>
+        <option value="gemini">Gemini (cloud)</option>
+        <option value="ollama">Local — Ollama</option>
+        <option value="mock">Mock (scripted, offline)</option>
+      </select>
+    </label>
+    <button id="start">Start new session</button>
+    <span id="activeBadge" class="badge" style="display:none"></span>
+  </div>
+  <div id="startError" class="err"></div>
+
+  <div class="layout">
+    <div class="panel">
+      <div id="flagBanner" class="flag"></div>
+      <div id="chat"></div>
+      <div class="row">
+        <input type="text" id="input" placeholder="Type the patient's reply…" disabled>
+        <button id="send" disabled>Send</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="sub" style="margin-bottom:8px">Structured history so far</div>
+      <pre id="historyJson">{}</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+let sessionId = null;
+
+const chatEl = document.getElementById('chat');
+const inputEl = document.getElementById('input');
+const sendBtn = document.getElementById('send');
+const startBtn = document.getElementById('start');
+const historyEl = document.getElementById('historyJson');
+const flagBanner = document.getElementById('flagBanner');
+const activeBadge = document.getElementById('activeBadge');
+const startError = document.getElementById('startError');
+const ayushBox = document.getElementById('ayush');
+const backendSelect = document.getElementById('backend');
+
+function addMsg(role, text) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+async function refreshBackendAvailability() {
+  try {
+    const res = await fetch('/backends');
+    const data = await res.json();
+    const label = {
+      gemini: data.gemini.available ? `Gemini (cloud) — ${data.gemini.model}` : 'Gemini (cloud) — no API key set',
+      ollama: data.ollama.available ? `Local — Ollama (${data.ollama.model})` : 'Local — Ollama not reachable',
+    };
+    for (const opt of backendSelect.options) {
+      if (opt.value === 'gemini') { opt.textContent = label.gemini; opt.disabled = !data.gemini.available; }
+      if (opt.value === 'ollama') { opt.textContent = label.ollama; opt.disabled = !data.ollama.available; }
+    }
+  } catch (e) {
+    // /backends itself unreachable — leave options as-is, /sessions will surface a clear error if picked
+  }
+}
+refreshBackendAvailability();
+
+startBtn.addEventListener('click', async () => {
+  chatEl.innerHTML = '';
+  flagBanner.style.display = 'none';
+  startError.style.display = 'none';
+  historyEl.textContent = '{}';
+
+  const res = await fetch('/sessions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ayush_mode: ayushBox.checked, backend: backendSelect.value }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    startError.textContent = err.detail || `Could not start session (HTTP ${res.status})`;
+    startError.style.display = 'block';
+    await refreshBackendAvailability();
+    return;
+  }
+
+  const data = await res.json();
+  sessionId = data.session_id;
+  activeBadge.textContent = 'active: ' + data.backend;
+  activeBadge.className = 'badge on';
+  activeBadge.style.display = 'inline';
+  addMsg('assistant', data.question);
+  inputEl.disabled = false;
+  sendBtn.disabled = false;
+  inputEl.focus();
+});
+
+async function send() {
+  const text = inputEl.value.trim();
+  if (!text || !sessionId) return;
+  addMsg('patient', text);
+  inputEl.value = '';
+  sendBtn.disabled = true;
+
+  const res = await fetch(`/sessions/${sessionId}/message`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+  });
+  sendBtn.disabled = false;
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    addMsg('assistant', 'Error from ' + (activeBadge.textContent || 'backend') + ': ' + (err.detail || `HTTP ${res.status}`));
+    return; // input stays enabled so they can retry or try a different backend on the next session
+  }
+
+  const data = await res.json();
+
+  if (data.acknowledgement) addMsg('assistant', data.acknowledgement);
+
+  if (data.red_flag) {
+    flagBanner.style.display = 'block';
+    flagBanner.textContent = 'RED FLAG: ' + (data.red_flag_reason || 'emergency symptom detected') + ' — priority alert to staff, normal interview stopped.';
+  }
+
+  if (data.question) {
+    addMsg('assistant', data.question);
+  } else if (data.complete) {
+    addMsg('assistant', '— interview complete —');
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+  }
+
+  historyEl.textContent = JSON.stringify(data.history_so_far, null, 2);
+}
+
+sendBtn.addEventListener('click', send);
+inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
+</script>
+</body>
+</html>

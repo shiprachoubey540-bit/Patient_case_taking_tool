@@ -1,0 +1,22 @@
+[
+  {
+    "condition": "Headache",
+    "protocol": "CLINICAL GUIDELINE FOR HEADACHE: Always assess for 'red flag' symptoms. Ask if the headache had a sudden, explosive onset (like a thunderclap). Ask about associated neck stiffness, fever, or visual changes. Determine if the pain is unilateral (one-sided) or bilateral."
+  },
+  {
+    "condition": "Chest Pain",
+    "protocol": "CLINICAL GUIDELINE FOR CHEST PAIN: Rule out cardiac emergencies. Ask if the pain radiates to the jaw, neck, or left arm. Ask about shortness of breath, sweating, or nausea. Ask if the pain worsens with physical exertion or deep breathing."
+  },
+  {
+    "condition": "Abdominal Pain",
+    "protocol": "CLINICAL GUIDELINE FOR ABDOMINAL PAIN: Determine the exact location or quadrant. Ask if the pain is sharp or dull, and if it moves (radiates) to the back or groin. Ask about vomiting, changes in bowel habits, and if it worsens after eating."
+  },
+  {
+    "condition": "Fever",
+    "protocol": "CLINICAL GUIDELINE FOR FEVER: Ask about the duration and maximum temperature. Ask about associated chills, night sweats, or unexplained weight loss. Check for localized symptoms like a new cough, painful urination, or a skin rash."
+  },
+  {
+    "condition": "Joint Pain",
+    "protocol": "CLINICAL GUIDELINE FOR JOINT PAIN: Ask if the pain is in one specific joint or multiple joints. Ask about morning stiffness and how long it lasts. Check for swelling, redness, or warmth over the joint. Ask if there was any recent trauma or injury."
+  }
+]
