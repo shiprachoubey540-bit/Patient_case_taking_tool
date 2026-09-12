@@ -1,7 +1,42 @@
+# Shared virtual environment for all four MediKiosk services — added
+# 2026-09-11 so you only need ONE `venv` + ONE `pip install` for the whole
+# project instead of four. This is the union of converse-module/,
+# ocr-module/, voice-module/, and kiosk-backend/'s own requirements.txt
+# files, deduplicated. Those four files are still each module's own source
+# of truth if you ever want to run just one service in total isolation
+# (e.g. a stripped-down deploy of only kiosk-backend) — this file doesn't
+# replace them, it just lets run_all.py (and you) install everything once.
+#
+# Setup:
+#   python3 -m venv .venv
+#   source .venv/bin/activate        # Windows: .venv\Scripts\activate
+#   pip install -r requirements.txt
+#
+# run_all.py looks for this venv first (repo root .venv) and only falls
+# back to a per-module .venv/ if it's missing, so existing per-module
+# venvs from before 2026-09-11 keep working unchanged.
+
 fastapi>=0.115
 uvicorn[standard]>=0.30
 pydantic>=2.7
-google-genai>=1.0
 python-dotenv>=1.0
-pytest>=8.0
+python-multipart>=0.0.9
+jinja2>=3.1
 httpx>=0.27
+
+# converse-module, ocr-module — cloud LLM backend
+google-genai>=1.0
+
+# ocr-module — document photo parsing
+Pillow>=10.0
+python-dateutil>=2.9
+
+# voice-module — local speech-to-text (this is the heavy one: pulls in
+# ctranslate2, and will download Whisper model weights on first real use —
+# see voice-module/README.md)
+faster-whisper>=1.0
+
+# tests (all four modules)
+pytest>=8.0
+pytest-asyncio>=0.24
+respx>=0.21
