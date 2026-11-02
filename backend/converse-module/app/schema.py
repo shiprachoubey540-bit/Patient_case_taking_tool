@@ -1,4 +1,4 @@
-"""
+﻿"""
 Shared clinical-history schema.
 
 This is the contract every other MediKiosk module should build against:
@@ -59,33 +59,37 @@ class ClinicalHistory(BaseModel):
     past_medical_surgical_history: List[str] = Field(default_factory=list)
     # current_medications / drug_allergy_history used to be one merged
     # "drug_allergy_history" free-text field. That was a real ambiguity risk
-    # — a physician reading "metformin" in it couldn't tell whether the
-    # patient takes it or reacts to it — so as of 2026-09-07 they're split.
+    # â€” a physician reading "metformin" in it couldn't tell whether the
+    # patient takes it or reacts to it â€” so as of 2026-09-07 they're split.
     # If you're looking at old session data or a downstream consumer still
     # expecting the merged shape, that's the bug this split fixes, not a
     # regression. Field descriptions below are sent to the LLM as part of
-    # its schema, so keep them purely instructional — no changelog text.
+    # its schema, so keep them purely instructional â€” no changelog text.
     current_medications: List[str] = Field(
         default_factory=list,
-        description="Medicines the patient is CURRENTLY TAKING. Never put an allergy here — "
+        description="Medicines the patient is CURRENTLY TAKING. Never put an allergy here â€” "
         "see drug_allergy_history for that.",
     )
     drug_allergy_history: List[str] = Field(
         default_factory=list,
         description="Medicines the patient is ALLERGIC TO (or has had a bad reaction to). "
-        "Never put a currently-taken medication here — see current_medications for that.",
+        "Never put a currently-taken medication here â€” see current_medications for that.",
     )
     family_history: List[str] = Field(default_factory=list)
     personal_history: Optional[str] = None
     review_of_systems: List[str] = Field(default_factory=list)
     ayush: Optional[AyushAssessment] = None
+    icd10_codes: List[dict] = Field(
+        default_factory=list,
+        description="Auto-mapped WHO ICD-10 diagnostic codes based on clinical findings.",
+    )
 
 
 class TurnResult(BaseModel):
     """
     What one dialogue turn produces. The model is asked to re-derive the
     FULL current history from the whole transcript each turn (not emit a
-    patch) — that avoids merge-conflict bugs and is cheap enough at
+    patch) â€” that avoids merge-conflict bugs and is cheap enough at
     single-conversation scale.
     """
 
@@ -98,7 +102,7 @@ class TurnResult(BaseModel):
         default="Can you tell me more about that?",
         min_length=1,
         description="The single next question to ask, as a natural-language string. "
-        "This must NEVER be empty, under any circumstance — not even when complete "
+        "This must NEVER be empty, under any circumstance â€” not even when complete "
         "or red_flag is true. If the interview is ending, put a short one-sentence "
         "closing remark here instead of a question (e.g. 'Thank you, that's "
         "everything we need for now.'). There is no situation where leaving this "
@@ -124,7 +128,7 @@ class TurnResult(BaseModel):
         "others; "
         "'routine' = a routine complaint with no urgency signals. "
         "Leave this null until you have at least a chief complaint and a rough sense of "
-        "severity — don't guess from nothing on turn one. This is advisory information for "
+        "severity â€” don't guess from nothing on turn one. This is advisory information for "
         "the queue, separate from red_flag: red_flag alone still controls whether the "
         "interview stops.",
     )
@@ -213,3 +217,4 @@ class TurnResult(BaseModel):
             obj.next_question = ""
             
         return obj
+
