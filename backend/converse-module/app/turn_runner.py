@@ -1,10 +1,10 @@
-"""
+﻿"""
 Wraps a backend's run_turn() to handle "empty" turns: schema-valid, but with
-no next_question and not marked complete either — i.e. nothing for the UI to
+no next_question and not marked complete either â€” i.e. nothing for the UI to
 show and nothing for the interview to do next.
 
 This showed up in practice with the local Ollama backend (llama3.1:8b), and
-consistently — not a one-off. Ollama's `format` parameter enforces the JSON
+consistently â€” not a one-off. Ollama's `format` parameter enforces the JSON
 *shape*, not that the model fills the fields sensibly, and a smaller/local
 model is more likely to leave next_question null without setting
 complete=true than Gemini is.
@@ -12,15 +12,15 @@ complete=true than Gemini is.
 Behavior: retry once, and if it's still empty, fall back to a generic
 continuation question and keep the interview moving rather than stopping it
 cold. The point of the Ollama backend is to keep a demo alive if venue wifi
-dies — a hard failure on a known, somewhat common model quirk defeats that
+dies â€” a hard failure on a known, somewhat common model quirk defeats that
 purpose. A real exception (network error, invalid JSON that fails schema
-validation) is NOT swallowed here — it propagates so main.py can still
+validation) is NOT swallowed here â€” it propagates so main.py can still
 surface a clear 502; this only papers over "technically valid, semantically
 empty" responses.
 
 2026-09-12 fix: the retry used to just call the backend again with the
 IDENTICAL transcript and system prompt. Confirmed on real hardware (legion)
-that this often does NOT help — gemma4:12b left next_question blank "twice
+that this often does NOT help â€” gemma4:12b left next_question blank "twice
 in a row" on the very first interview turn, not as a rare coincidence. At
 temperature 0.3 with nothing else different, a local model has very little
 reason to answer differently the second time. The retry now passes
@@ -29,7 +29,7 @@ mistake and re-stating what's required, so the retry has an actual reason to
 diverge instead of relying on sampling noise alone.
 
 If you'd rather know immediately every time this happens instead of getting
-a generic fallback question, that's a reasonable choice too — swap the
+a generic fallback question, that's a reasonable choice too â€” swap the
 fallback below for `raise RuntimeError(...)`.
 """
 from __future__ import annotations
@@ -43,11 +43,11 @@ from .schema import TurnResult
 TurnFn = Callable[[List[dict], bool, str, int, Optional[str], Optional[str]], TurnResult]
 
 # Localized so a patient mid-Hindi-interview doesn't suddenly get an English
-# sentence at exactly the moment the backend is already struggling — see
+# sentence at exactly the moment the backend is already struggling â€” see
 # prompts.py's module docstring for the same "generated, not reviewed" caveat.
 FALLBACK_QUESTIONS = {
     "en": "Sorry, could you tell me a bit more about that?",
-    "hi": "माफ़ कीजिए, क्या आप इसके बारे में थोड़ा और बता सकते हैं?",
+    "hi": "à¤®à¤¾à¤«à¤¼ à¤•à¥€à¤œà¤¿à¤, à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤‡à¤¸à¤•à¥‡ à¤¬à¤¾à¤°à¥‡ à¤®à¥‡à¤‚ à¤¥à¥‹à¤¡à¤¼à¤¾ à¤”à¤° à¤¬à¤¤à¤¾ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆà¤‚?",
 }
 
 
@@ -65,11 +65,11 @@ def run_turn_with_retry(
     result = turn_fn(transcript, ayush_mode, language, turn_count, None, current_history)
     if _is_empty_turn(result):
         print(
-            f"[turn_runner] empty turn #1 — last patient text: {_last_patient_text(transcript)!r} | "
+            f"[turn_runner] empty turn #1 â€” last patient text: {_last_patient_text(transcript)!r} | "
             f"acknowledgement={result.acknowledgement!r} | history_so_far={result.history.model_dump_json()}",
             file=sys.stderr,
         )
-        # The retry used to repeat this exact call with nothing changed —
+        # The retry used to repeat this exact call with nothing changed â€”
         # at low-but-nonzero temperature that gave a local model very
         # little reason to answer differently, and in practice it often
         # didn't (see prompts.py's RETRY_HINT docstring: this was observed
@@ -80,11 +80,17 @@ def run_turn_with_retry(
         if _is_empty_turn(result):
             print(
                 "[turn_runner] backend returned an empty turn twice in a row "
-                f"(no next_question, not complete) — falling back to a generic question | "
+                f"(no next_question, not complete) â€” falling back to a generic question | "
                 f"last patient text: {_last_patient_text(transcript)!r} | acknowledgement={result.acknowledgement!r} | "
                 f"history_so_far={result.history.model_dump_json()}",
                 file=sys.stderr,
             )
             fallback = FALLBACK_QUESTIONS.get(language, FALLBACK_QUESTIONS["en"])
             result = result.model_copy(update={"next_question": fallback})
+    try:
+        from app.icd10_mapper import extract_icd10_from_history
+        result.history.icd10_codes = extract_icd10_from_history(result.history.model_dump())
+    except Exception as e:
+        print(f"[turn_runner] ICD-10 mapping error: {e}", file=sys.stderr)
     return result
+

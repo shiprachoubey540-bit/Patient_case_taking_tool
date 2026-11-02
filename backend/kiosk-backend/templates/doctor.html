@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MediKiosk — Staff View</title>
+<title>MediKiosk â€” Staff View</title>
 <style>
   :root {
     --primary: #0f766e; --primary-dark: #0c5c56; --primary-light: #f0fdfa; --success: #16a34a; --red: #b91c1c;
@@ -78,7 +78,7 @@
 <body>
 <div id="app">
   <header class="kiosk-header">
-    <h1>MediKiosk — Staff View</h1>
+    <h1>MediKiosk â€” Staff View</h1>
     <div class="subtitle">Visit lookup &amp; queue</div>
   </header>
 
@@ -103,13 +103,13 @@
     <h2>Queue</h2>
     <p class="lead">Most urgent first, then most recently updated. Click a code to open it above.</p>
     <div id="refresh-note" class="muted"></div>
-    <div id="queue-body"><div class="empty-note">Loading…</div></div>
+    <div id="queue-body"><div class="empty-note">Loadingâ€¦</div></div>
   </div>
 </div>
 
 <script>
 const $ = (id) => document.getElementById(id);
-const API = ""; // same-origin — served by the kiosk backend itself
+const API = ""; // same-origin â€” served by the kiosk backend itself
 
 async function api(path) {
   const res = await fetch(path);
@@ -145,7 +145,7 @@ function timeAgo(ts) {
 async function loadQueue() {
   try {
     const rows = await api("/doctor/visits");
-    $("refresh-note").textContent = `${rows.length} visit(s) — refreshes automatically`;
+    $("refresh-note").textContent = `${rows.length} visit(s) â€” refreshes automatically`;
     if (!rows.length) {
       $("queue-body").innerHTML = `<div class="empty-note">No visits yet.</div>`;
       return;
@@ -153,8 +153,8 @@ async function loadQueue() {
     const body = rows.map(r => `
       <tr class="${rowClass(r)}">
         <td class="token-cell" data-token="${r.token}">${r.token}</td>
-        <td>${r.patient_name || "<em>—</em>"}</td>
-        <td>${r.chief_complaint || "<em>—</em>"}</td>
+        <td>${r.patient_name || "<em>â€”</em>"}</td>
+        <td>${r.chief_complaint || "<em>â€”</em>"}</td>
         <td>${statusBadge(r)}</td>
         <td class="muted">${timeAgo(r.updated_at)}</td>
       </tr>
@@ -169,7 +169,7 @@ async function loadQueue() {
       cell.onclick = () => { $("lookup-input").value = cell.dataset.token; lookup(); };
     });
   } catch (e) {
-    $("queue-body").innerHTML = `<div class="empty-note">Couldn't load the queue — is the kiosk backend running?</div>`;
+    $("queue-body").innerHTML = `<div class="empty-note">Couldn't load the queue â€” is the kiosk backend running?</div>`;
   }
 }
 
@@ -187,12 +187,46 @@ function renderDetail(data) {
   const hpi = h.hpi || {};
   let out = `<div class="card" style="background:var(--bg);">`;
   out += `<div class="muted" style="margin-bottom:10px;">
-    Code <strong>${v.token}</strong> · ${v.patient_name || "no name given"} ·
+    Code <strong>${v.token}</strong> Â· ${v.patient_name || "no name given"} Â·
     ${data.live ? "live data" : "<strong>last saved snapshot</strong> (this visit's live session isn't reachable right now)"}
   </div>`;
   if (v.red_flag) out += section("Status", `<span class="badge badge-emergency">Red flag: ${data.history.red_flag_reason || ""}</span>`);
   else if (v.triage_level) out += section("Priority", `<span class="badge badge-${v.triage_level}">${TRIAGE_LABELS[v.triage_level] || v.triage_level}</span>`);
   out += section("Chief complaint", h.chief_complaint || "<em>Not recorded</em>");
+
+  // Dynamic ICD-10 Code Extraction
+  let codes = h.icd10_codes || [];
+  if (!codes.length && h.chief_complaint) {
+    const text = h.chief_complaint.toLowerCase();
+    if (text.includes("acid") || text.includes("burn") || text.includes("reflux") || text.includes("stomach")) {
+      codes.push({ code: "K21.9", name: "Gastro-esophageal reflux disease without esophagitis (GERD)", matched_keyword: "acidity/stomach burning" });
+    }
+    if (text.includes("diabet") || text.includes("sugar")) {
+      codes.push({ code: "E11.9", name: "Type 2 diabetes mellitus without complications (Prameha)", matched_keyword: "diabetes" });
+    }
+    if (text.includes("bp") || text.includes("hypertens") || text.includes("pressure")) {
+      codes.push({ code: "I10", name: "Essential (primary) hypertension", matched_keyword: "blood pressure" });
+    }
+    if (text.includes("joint") || text.includes("knee") || text.includes("arthrit")) {
+      codes.push({ code: "M19.90", name: "Unspecified osteoarthritis, unspecified site (Sandhigata Vata)", matched_keyword: "joint pain" });
+    }
+    if (text.includes("constipat") || text.includes("gas") || text.includes("bloat")) {
+      codes.push({ code: "K59.00", name: "Constipation, unspecified (Vibandha)", matched_keyword: "constipation" });
+    }
+  }
+
+  if (codes.length) {
+    const icdBadges = codes.map(c => 
+      `<div style="margin: 6px 0;"><span class="badge" style="background:#0284c7; color:white; font-weight:700; padding:3px 8px; border-radius:6px; margin-right:8px; font-size:12px;">${c.code}</span><strong style="color:#0f172a;">${c.name}</strong> <span style="color:#64748b; font-size:12px;">(trigger: ${c.matched_keyword})</span></div>`
+    ).join("");
+    out += section("ICD-10 Diagnostic Codes (Auto-Mapped)", icdBadges);
+  }
+  if (h.icd10_codes && h.icd10_codes.length) {
+    const icdBadges = h.icd10_codes.map(c => 
+      `<div style="margin: 4px 0;"><span class="badge" style="background:#2563eb; color:white; font-weight:bold; margin-right:6px;">${c.code}</span> ${c.name} <em style="color:#64748b; font-size:12px;">(matched: ${c.matched_keyword})</em></div>`
+    ).join("");
+    out += section("ICD-10 Diagnostic Codes (Auto-Mapped)", icdBadges);
+  }
 
   const hpiParts = [];
   if (hpi.onset) hpiParts.push(`Onset: ${hpi.onset}`);
@@ -240,3 +274,6 @@ setInterval(loadQueue, 10000);
 </script>
 </body>
 </html>
+
+
+
