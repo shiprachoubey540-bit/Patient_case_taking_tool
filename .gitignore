@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets - never commit these
+.env
