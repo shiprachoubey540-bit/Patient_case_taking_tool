@@ -1,4 +1,4 @@
-"""
+﻿"""
 generate_synthetic_cohort.py - builds data/synthetic_opd_cohort_500.csv
 
 Owner: Member 1 (Data & Standards).
@@ -47,7 +47,7 @@ CONDITIONS = [
      "sev": (0.75, 0.22, 0.03),
      "symptoms": ["cold", "cough", "running nose", "sore throat", "mild fever"],
      "history": ["allergic rhinitis", "asthma", "none", "none"]},
-    {"code": "J45.909", "category": "Respiratory", "weight": 7, "age": (35, 20),
+    {"code": "J45.9", "category": "Respiratory", "weight": 7, "age": (35, 20),
      "sev": (0.35, 0.40, 0.25),
      "symptoms": ["wheezing", "breathlessness", "cough", "chest tightness", "shortness of breath"],
      "history": ["asthma", "allergic rhinitis", "smoking", "none"]},
@@ -55,11 +55,11 @@ CONDITIONS = [
      "sev": (0.65, 0.30, 0.05),
      "symptoms": ["heartburn", "acidity", "sour burp", "burning chest", "indigestion"],
      "history": ["gerd", "obesity", "none", "none"]},
-    {"code": "K59.00", "category": "Digestive", "weight": 6, "age": (45, 18),
+    {"code": "K59.0", "category": "Digestive", "weight": 6, "age": (45, 18),
      "sev": (0.75, 0.22, 0.03),
      "symptoms": ["constipation", "hard stool", "bloating", "abdominal discomfort"],
      "history": ["irregular bowel habits", "diabetes", "none", "none"]},
-    {"code": "K29.70", "category": "Digestive", "weight": 6, "age": (40, 15),
+    {"code": "K29.7", "category": "Digestive", "weight": 6, "age": (40, 15),
      "sev": (0.50, 0.38, 0.12),
      "symptoms": ["epigastric pain", "burning stomach", "nausea", "vomiting", "loss of appetite"],
      "history": ["gastritis", "nsaid use", "none", "none"]},
@@ -67,7 +67,7 @@ CONDITIONS = [
      "sev": (0.45, 0.43, 0.12),
      "symptoms": ["increased thirst", "frequent urination", "fatigue", "blurred vision", "weakness"],
      "history": ["type 2 diabetes", "hypertension", "obesity", "family history of diabetes"]},
-    {"code": "E11.65", "category": "Endocrine_Metabolic", "weight": 4, "age": (58, 11),
+    {"code": "E11.8", "category": "Endocrine_Metabolic", "weight": 4, "age": (58, 11),
      "sev": (0.15, 0.45, 0.40),
      "symptoms": ["increased thirst", "frequent urination", "weakness", "nausea", "blurred vision"],
      "history": ["type 2 diabetes", "hypertension", "kidney disease"]},
@@ -75,11 +75,11 @@ CONDITIONS = [
      "sev": (0.70, 0.27, 0.03),
      "symptoms": ["weight gain", "fatigue", "joint pain", "breathlessness on exertion"],
      "history": ["obesity", "hypertension", "prediabetes", "none"]},
-    {"code": "M19.90", "category": "Musculoskeletal", "weight": 9, "age": (62, 10),
+    {"code": "M19.9", "category": "Musculoskeletal", "weight": 9, "age": (62, 10),
      "sev": (0.50, 0.40, 0.10),
      "symptoms": ["knee pain", "joint pain", "joint stiffness", "swelling in knee"],
      "history": ["osteoarthritis", "obesity", "previous knee injury", "none"]},
-    {"code": "M54.50", "category": "Musculoskeletal", "weight": 9, "age": (45, 15),
+    {"code": "M54.5", "category": "Musculoskeletal", "weight": 9, "age": (45, 15),
      "sev": (0.55, 0.37, 0.08),
      "symptoms": ["low back pain", "back pain", "stiffness", "pain radiating to leg"],
      "history": ["sedentary job", "previous back injury", "none", "none"]},
@@ -91,7 +91,7 @@ CONDITIONS = [
 
 SEVERITIES = ["Mild", "Moderate", "Severe"]
 SEV_NUM = {"Mild": 0, "Moderate": 1, "Severe": 2}
-RESPIRATORY_CODES = {"J00", "J45.909"}
+RESPIRATORY_CODES = {"J00", "J45.9"}
 CARDIAC_CODES = {"I10", "I20.9"}
 
 
@@ -117,7 +117,7 @@ def make_vitals(code: str, severity: str) -> dict:
         pulse += 4 * s
     if code in {"J00", "M79.1"} and s == 0 and random.random() < 0.30:
         temp += random.uniform(0.8, 1.6)          # mild fever
-    if code in {"E11.65", "I20.9"} and s == 2 and random.random() < 0.25:
+    if code in {"E11.8", "I20.9"} and s == 2 and random.random() < 0.25:
         sbp -= random.uniform(20, 35)             # low BP in sicker patients
 
     on_oxygen = 0
