@@ -174,6 +174,9 @@ def make_patient(index: int) -> dict:
     if "none" in history and len(history) > 1:
         history = [h for h in history if h != "none"]
 
+    if not history:  # both picks were "none"
+        history = ["none"]
+
     vitals = make_vitals(cond["code"], severity)
     row = {
         "patient_id": f"P{index:04d}",

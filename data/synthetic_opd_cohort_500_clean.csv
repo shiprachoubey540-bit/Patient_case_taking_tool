@@ -1,0 +1,501 @@
+patient_id,age,gender,symptoms,medical_history,respiratory_rate,spo2,on_oxygen,systolic_bp,diastolic_bp,pulse,temperature_c,consciousness,disease_category,icd10_code,severity,admission_outcome
+P0001,54,Female,weakness;increased thirst;fatigue;frequent urination,type 2 diabetes,17,99,0,110,67,76,36.6,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0002,21,Female,burning chest;sour burp,obesity;gerd,16,99,0,125,72,79,36.8,Alert,Digestive,K21.9,Mild,Discharged
+P0003,52,Female,joint pain;breathlessness on exertion;weight gain;fatigue,hypertension,17,98,0,137,81,53,36.3,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0004,44,Female,cold;cough;running nose;mild fever,none,16,96,0,110,59,69,36.6,Alert,Respiratory,J00,Mild,Discharged
+P0005,57,Female,blurred vision;dizziness;fatigue;palpitations,smoking;diabetes,16,99,0,127,70,82,36.7,Alert,Circulatory,I10,Mild,Discharged
+P0006,11,Female,cold;mild fever,asthma,24,90,0,128,81,101,37.7,Alert,Respiratory,J00,Severe,Admitted
+P0007,30,Female,joint pain;fatigue,none,19,98,0,116,72,76,36.0,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0008,41,Female,frequent urination;fatigue,type 2 diabetes,18,95,0,131,80,91,37.6,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0009,56,Female,cough;mild fever;running nose;sore throat,none,13,99,0,149,89,74,36.6,Alert,Respiratory,J00,Mild,Discharged
+P0010,37,Female,increased thirst;frequent urination;weakness,obesity,16,99,0,121,73,75,36.8,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0011,48,Female,dizziness;palpitations;headache;fatigue,diabetes;hypertension,18,98,0,124,76,81,37.0,Alert,Circulatory,I10,Mild,Discharged
+P0012,40,Male,dizziness;fatigue,none,17,98,0,145,87,75,37.1,Alert,Circulatory,I10,Mild,Discharged
+P0013,69,Female,burning stomach;vomiting,gastritis,19,98,0,122,67,63,36.8,Alert,Digestive,K29.70,Mild,Discharged
+P0014,56,Female,sore throat;cough;cold;mild fever,allergic rhinitis,15,97,0,118,70,76,36.5,Alert,Respiratory,J00,Mild,Discharged
+P0015,48,Female,mild fever;body ache,none,14,99,0,108,70,70,37.0,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0016,25,Female,sore throat;running nose;cold,none,14,97,0,131,81,84,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0017,9,Male,mild fever;cold;running nose;cough,asthma,16,98,0,122,71,93,37.6,Alert,Respiratory,J00,Mild,Discharged
+P0018,68,Female,constipation;bloating,irregular bowel habits,16,100,0,115,65,72,36.8,Alert,Digestive,K59.00,Mild,Discharged
+P0019,77,Female,fatigue;dizziness;palpitations,hypertension,14,97,0,143,91,92,36.2,Alert,Circulatory,I10,Mild,Discharged
+P0020,58,Female,nausea;chest pressure;chest pain,diabetes,23,94,0,145,86,101,37.8,Alert,Circulatory,I20.9,Severe,Admitted
+P0021,76,Male,joint stiffness;joint pain;knee pain,osteoarthritis,15,97,0,121,76,69,36.9,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0022,44,Male,increased thirst;fatigue,obesity,20,97,0,141,93,77,36.3,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0023,60,Female,back pain;pain radiating to leg;stiffness;low back pain,none,18,98,0,119,70,66,37.0,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0024,68,Female,chest pressure;sweating;nausea;chest pain,high cholesterol;diabetes,20,95,0,135,85,84,36.9,Alert,Circulatory,I20.9,Moderate,Discharged
+P0025,48,Female,stiffness;low back pain;pain radiating to leg;back pain,previous back injury,19,96,0,140,87,87,37.0,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0026,42,Male,frequent urination;weakness;fatigue,type 2 diabetes,18,96,0,107,68,89,36.7,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0027,50,Female,shortness of breath;nausea;sweating,diabetes;smoking,13,98,0,141,88,80,36.6,Alert,Circulatory,I20.9,Mild,Discharged
+P0028,26,Male,sour burp;heartburn;burning chest,obesity,20,96,0,136,89,87,36.9,Alert,Digestive,K21.9,Moderate,Admitted
+P0029,65,Male,swelling in knee;joint pain;knee pain;joint stiffness,obesity,13,96,0,130,77,73,36.2,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0030,43,Female,acidity;burning chest;heartburn;sour burp,gerd,18,96,0,125,80,83,36.9,Alert,Digestive,K21.9,Moderate,Discharged
+P0031,62,Male,swelling in knee;knee pain,previous knee injury,16,96,0,125,81,79,36.8,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0032,57,Male,weakness;frequent urination,obesity;hypertension,18,99,0,116,60,76,37.1,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0033,45,Male,dizziness;headache;blurred vision;palpitations,obesity,18,98,0,161,101,67,37.4,Alert,Circulatory,I10,Mild,Discharged
+P0034,29,Male,burning chest;heartburn;acidity,none,17,98,0,120,67,65,36.3,Alert,Digestive,K21.9,Mild,Discharged
+P0035,32,Male,bloating;hard stool,none,16,96,0,117,70,80,37.3,Alert,Digestive,K59.00,Moderate,Discharged
+P0036,49,Female,mild fever;cold;running nose,allergic rhinitis,18,98,0,119,75,70,36.3,Alert,Respiratory,J00,Mild,Admitted
+P0037,36,Male,shortness of breath;cough;breathlessness;chest tightness,allergic rhinitis,20,95,0,122,75,90,36.8,Alert,Respiratory,J45.909,Moderate,Discharged
+P0038,1,Male,mild fever;running nose;cold;sore throat,asthma,16,98,0,120,73,70,37.2,Alert,Respiratory,J00,Mild,Discharged
+P0039,59,Male,stiffness;low back pain;pain radiating to leg,sedentary job,16,97,0,137,88,69,36.8,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0040,39,Male,shortness of breath;breathlessness;cough,allergic rhinitis,29,93,1,133,87,85,38.0,Alert,Respiratory,J45.909,Severe,Admitted
+P0041,31,Male,sore throat;mild fever;cough,asthma,16,99,0,125,79,82,37.7,Alert,Respiratory,J00,Mild,Discharged
+P0042,7,Male,running nose;cough,allergic rhinitis,17,98,0,106,68,76,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0043,34,Male,tiredness;mild fever;muscle pain,recent viral illness,16,98,0,132,85,88,37.9,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0044,9,Male,cough;sore throat;running nose,allergic rhinitis;asthma,17,97,0,101,69,68,38.1,Alert,Respiratory,J00,Mild,Discharged
+P0045,35,Female,loss of appetite;epigastric pain;nausea,gastritis,17,99,0,123,76,83,36.4,Alert,Digestive,K29.70,Mild,Discharged
+P0046,35,Female,low back pain;stiffness,previous back injury,16,98,0,127,77,71,36.9,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0047,64,Female,blurred vision;weakness;increased thirst,hypertension;family history of diabetes,17,98,0,122,83,86,36.8,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0048,50,Male,cough;shortness of breath,allergic rhinitis,26,93,1,121,76,85,37.0,Alert,Respiratory,J45.909,Severe,Admitted
+P0049,59,Female,sore throat;cough;mild fever,asthma,18,94,0,128,82,85,36.6,Alert,Respiratory,J00,Moderate,Discharged
+P0050,46,Female,weight gain;fatigue,prediabetes,13,97,0,103,60,85,37.0,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0051,60,Male,weakness;frequent urination;blurred vision;increased thirst,type 2 diabetes;kidney disease,19,94,0,129,78,98,37.2,Alert,Endocrine_Metabolic,E11.65,Severe,Admitted
+P0052,46,Male,loss of appetite;vomiting,none,19,96,0,126,79,79,37.0,Alert,Digestive,K29.70,Moderate,Discharged
+P0053,54,Male,stiffness;pain radiating to leg;back pain;low back pain,sedentary job,19,97,0,133,80,85,37.2,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0054,66,Male,fatigue;headache,obesity;diabetes,18,95,0,133,75,82,36.8,Alert,Circulatory,I10,Moderate,Discharged
+P0055,74,Male,knee pain;joint stiffness;joint pain,osteoarthritis,20,95,0,117,75,81,37.2,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0056,9,Male,bloating;abdominal discomfort;hard stool,none,16,99,0,117,59,92,36.7,Alert,Digestive,K59.00,Mild,Discharged
+P0057,62,Female,joint stiffness;swelling in knee;joint pain,previous knee injury;osteoarthritis,15,98,0,101,59,68,36.3,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0058,70,Female,blurred vision;increased thirst;weakness;fatigue,obesity,19,96,0,139,89,86,36.8,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0059,43,Female,increased thirst;nausea;weakness;frequent urination,type 2 diabetes;hypertension,19,95,0,125,82,93,37.3,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0060,54,Male,blurred vision;increased thirst,type 2 diabetes,17,99,0,121,84,90,37.0,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0061,57,Female,increased thirst;fatigue;weakness;blurred vision,hypertension;type 2 diabetes,19,98,0,145,90,83,37.1,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0062,69,Female,headache;palpitations;dizziness;blurred vision,smoking,19,94,0,152,90,102,37.3,Alert,Circulatory,I10,Moderate,Discharged
+P0063,25,Female,mild fever;body ache;tiredness,recent viral illness,17,98,0,112,76,79,36.5,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0064,55,Female,weakness;frequent urination;blurred vision;fatigue,family history of diabetes,18,97,0,125,81,73,36.4,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0065,61,Male,running nose;cough,none,20,95,0,144,79,78,36.5,Alert,Respiratory,J00,Moderate,Admitted
+P0066,49,Male,cough;mild fever;running nose;sore throat,allergic rhinitis,18,97,0,128,85,81,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0067,40,Female,fatigue;increased thirst;blurred vision;frequent urination,obesity;hypertension,23,96,0,113,75,86,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0068,54,Male,fatigue;breathlessness on exertion;joint pain,obesity,19,99,0,124,79,79,36.5,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0069,29,Male,indigestion;burning chest;sour burp;acidity,obesity,14,98,0,132,82,83,36.8,Alert,Digestive,K21.9,Mild,Discharged
+P0070,46,Female,breathlessness;chest tightness,smoking,18,100,0,123,72,78,37.3,Alert,Respiratory,J45.909,Mild,Discharged
+P0071,50,Male,frequent urination;blurred vision;fatigue,type 2 diabetes;hypertension,20,96,0,112,66,86,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0072,45,Female,shortness of breath;breathlessness,smoking,15,99,0,126,81,78,36.8,Alert,Respiratory,J45.909,Mild,Discharged
+P0073,75,Male,swelling in knee;joint stiffness;joint pain;knee pain,none,18,98,0,119,79,76,37.0,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0074,52,Female,constipation;bloating,none,15,96,0,114,64,83,37.0,Alert,Digestive,K59.00,Mild,Discharged
+P0075,53,Female,constipation;bloating;abdominal discomfort,diabetes,14,98,0,106,58,52,36.7,Alert,Digestive,K59.00,Mild,Discharged
+P0076,79,Male,joint stiffness;knee pain;joint pain;swelling in knee,previous knee injury;obesity,16,96,0,110,74,99,36.9,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0077,29,Female,cough;chest tightness,allergic rhinitis;smoking,25,93,1,152,93,75,37.3,Alert,Respiratory,J45.909,Severe,Admitted
+P0078,40,Female,muscle pain;body ache,recent viral illness,19,98,0,121,69,66,36.8,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0079,59,Female,frequent urination;blurred vision;increased thirst;weakness,hypertension;family history of diabetes,16,97,0,126,79,76,36.8,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0080,84,Female,pain radiating to leg;back pain;stiffness;low back pain,previous back injury;sedentary job,15,98,0,139,82,76,37.1,Alert,Musculoskeletal,M54.50,Mild,Admitted
+P0081,39,Male,back pain;pain radiating to leg;low back pain;stiffness,sedentary job,17,98,0,128,75,89,37.7,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0082,62,Male,dizziness;headache,smoking;diabetes,17,96,0,129,80,76,37.3,Alert,Circulatory,I10,Moderate,Admitted
+P0083,17,Male,body ache;mild fever,none,20,99,0,107,59,82,36.8,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0084,49,Female,headache;blurred vision,none,15,96,0,136,83,74,36.9,Alert,Circulatory,I10,Mild,Discharged
+P0085,39,Male,heartburn;sour burp;indigestion;burning chest,none,21,96,0,106,60,97,37.2,Alert,Digestive,K21.9,Moderate,Admitted
+P0086,49,Male,joint pain;knee pain,previous knee injury,16,97,0,123,73,74,36.7,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0087,55,Male,palpitations;fatigue;dizziness,smoking,18,98,0,149,97,82,36.8,Alert,Circulatory,I10,Moderate,Discharged
+P0088,48,Male,body ache;muscle pain,none,15,97,0,112,72,73,37.9,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0089,37,Female,mild fever;cough;cold,none,27,93,1,128,73,95,37.0,Alert,Respiratory,J00,Severe,Discharged
+P0090,29,Female,sour burp;burning chest;acidity;indigestion,gerd,19,97,0,121,81,67,37.4,Alert,Digestive,K21.9,Moderate,Discharged
+P0091,7,Male,cold;sore throat,none,20,95,0,157,96,76,36.6,Alert,Respiratory,J00,Mild,Discharged
+P0092,11,Female,breathlessness;cough;chest tightness;wheezing,allergic rhinitis,16,98,0,122,73,68,36.5,Alert,Respiratory,J45.909,Mild,Discharged
+P0093,71,Female,nausea;shortness of breath;chest pressure,diabetes,25,94,0,139,88,100,37.4,Alert,Circulatory,I20.9,Severe,Admitted
+P0094,19,Female,body ache;tiredness,none,18,98,0,111,65,74,37.4,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0095,62,Female,frequent urination;weakness;increased thirst;blurred vision,type 2 diabetes,23,97,0,125,79,95,36.8,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0096,73,Female,blurred vision;palpitations;headache;dizziness,smoking;hypertension,21,94,0,163,103,94,37.2,Alert,Circulatory,I10,Severe,Admitted
+P0097,20,Female,tiredness;body ache,recent viral illness,15,99,0,149,81,77,37.0,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0098,75,Female,joint pain;swelling in knee,obesity,22,94,0,134,90,87,37.3,Voice,Musculoskeletal,M19.90,Severe,Admitted
+P0099,27,Female,back pain;pain radiating to leg;stiffness,sedentary job,17,96,0,129,85,91,37.4,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0100,40,Female,cough;cold,asthma,25,93,1,139,87,101,37.2,Alert,Respiratory,J00,Severe,Admitted
+P0101,46,Female,burning stomach;vomiting;nausea,none,17,98,0,119,76,67,36.6,Alert,Digestive,K29.70,Mild,Discharged
+P0102,27,Female,body ache;tiredness;muscle pain;mild fever,none,17,99,0,119,69,63,36.8,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0103,60,Male,frequent urination;blurred vision;fatigue,type 2 diabetes;obesity,20,97,0,116,68,89,37.4,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0104,43,Male,stiffness;pain radiating to leg;back pain;low back pain,none,15,97,0,120,78,83,36.8,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0105,68,Male,shortness of breath;chest tightness,smoking;asthma,16,97,0,120,71,82,36.8,Alert,Respiratory,J45.909,Mild,Discharged
+P0106,35,Female,running nose;cough;cold;mild fever,allergic rhinitis,14,97,0,119,78,74,37.8,Alert,Respiratory,J00,Mild,Admitted
+P0107,11,Female,burning stomach;nausea;loss of appetite,gastritis,21,95,0,124,69,89,36.7,Confusion,Digestive,K29.70,Severe,Discharged
+P0108,69,Female,blurred vision;headache,obesity,19,96,0,145,89,96,37.4,Alert,Circulatory,I10,Moderate,Discharged
+P0109,30,Male,mild fever;tiredness,recent viral illness,21,96,0,119,76,86,37.5,Alert,Musculoskeletal,M79.1,Moderate,Discharged
+P0110,60,Male,heartburn;acidity;indigestion,gerd,16,99,0,125,83,70,36.6,Alert,Digestive,K21.9,Mild,Discharged
+P0111,32,Male,sore throat;running nose,none,15,99,0,135,89,80,36.7,Alert,Respiratory,J00,Mild,Discharged
+P0112,44,Female,back pain;stiffness,none,19,95,0,121,79,88,37.4,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0113,50,Female,loss of appetite;vomiting;epigastric pain;burning stomach,none,17,97,0,108,65,82,36.6,Alert,Digestive,K29.70,Mild,Admitted
+P0114,16,Male,cold;sore throat,allergic rhinitis,16,100,0,134,84,93,37.1,Alert,Respiratory,J00,Mild,Discharged
+P0115,1,Male,mild fever;body ache;tiredness,recent viral illness,18,100,0,145,90,76,37.4,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0116,28,Male,frequent urination;nausea,type 2 diabetes;hypertension,23,97,0,121,69,85,36.8,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0117,63,Male,low back pain;pain radiating to leg;stiffness;back pain,previous back injury,17,99,0,135,81,92,36.9,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0118,71,Female,breathlessness;cough;wheezing,none,22,94,0,116,68,101,37.4,Alert,Respiratory,J45.909,Moderate,Discharged
+P0119,70,Female,abdominal discomfort;hard stool;constipation,irregular bowel habits,22,93,0,132,86,85,37.1,Alert,Digestive,K59.00,Severe,Admitted
+P0120,9,Male,tiredness;body ache,recent viral illness,14,100,0,133,86,87,36.9,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0121,47,Female,back pain;pain radiating to leg;stiffness,previous back injury,21,96,0,157,94,68,37.6,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0122,32,Female,sore throat;mild fever;running nose,asthma,19,93,0,129,72,71,37.0,Alert,Respiratory,J00,Moderate,Admitted
+P0123,64,Female,running nose;sore throat,asthma;allergic rhinitis,15,99,0,129,78,83,36.5,Alert,Respiratory,J00,Mild,Discharged
+P0124,29,Female,tiredness;body ache,none,16,97,0,99,60,95,37.2,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0125,67,Female,joint pain;knee pain,none,14,98,0,114,65,84,36.4,Alert,Musculoskeletal,M19.90,Mild,Admitted
+P0126,42,Female,loss of appetite;nausea;epigastric pain,nsaid use;gastritis,15,99,0,139,91,77,36.8,Alert,Digestive,K29.70,Mild,Discharged
+P0127,49,Female,headache;fatigue;palpitations,smoking,21,94,0,163,81,101,37.3,Alert,Circulatory,I10,Severe,Discharged
+P0128,56,Female,back pain;low back pain,sedentary job,16,99,0,137,82,74,36.7,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0129,72,Female,blurred vision;dizziness,none,17,99,0,145,90,69,36.6,Alert,Circulatory,I10,Mild,Discharged
+P0130,33,Female,weight gain;fatigue,obesity,19,97,0,119,73,84,36.8,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0131,18,Male,mild fever;body ache;muscle pain;tiredness,recent viral illness,16,100,0,123,75,84,36.6,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0132,47,Male,acidity;burning chest,gerd,19,97,0,133,87,94,36.9,Alert,Digestive,K21.9,Moderate,Discharged
+P0133,67,Female,indigestion;acidity;sour burp;burning chest,obesity,16,97,0,126,77,76,36.8,Alert,Digestive,K21.9,Mild,Discharged
+P0134,54,Female,indigestion;acidity;burning chest,obesity,24,95,0,139,82,80,37.1,Alert,Digestive,K21.9,Moderate,Admitted
+P0135,67,Male,joint pain;swelling in knee;joint stiffness;knee pain,previous knee injury;obesity,19,96,0,145,88,74,36.9,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0136,52,Male,acidity;heartburn;sour burp;indigestion,none,15,97,0,134,76,99,37.2,Alert,Digestive,K21.9,Moderate,Admitted
+P0137,47,Male,shortness of breath;chest tightness;cough,smoking,21,99,0,115,62,81,36.8,Alert,Respiratory,J45.909,Mild,Discharged
+P0138,8,Male,cold;sore throat;cough;running nose,allergic rhinitis,17,99,0,107,63,76,36.7,Alert,Respiratory,J00,Mild,Discharged
+P0139,79,Female,blurred vision;increased thirst;weakness,obesity,18,99,0,128,74,93,37.4,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0140,38,Female,wheezing;cough,allergic rhinitis,15,99,0,120,79,66,36.6,Alert,Respiratory,J45.909,Mild,Discharged
+P0141,68,Male,joint pain;swelling in knee;joint stiffness;knee pain,obesity,20,97,0,126,86,98,36.9,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0142,59,Male,shortness of breath;cough;chest tightness,smoking,22,95,0,126,70,80,36.8,Alert,Respiratory,J45.909,Moderate,Discharged
+P0143,52,Male,frequent urination;blurred vision;weakness,family history of diabetes,17,97,0,98,79,89,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0144,25,Female,cold;running nose;mild fever;cough,asthma,11,99,0,122,71,67,36.7,Alert,Respiratory,J00,Mild,Discharged
+P0145,59,Male,blurred vision;dizziness;palpitations;fatigue,none,19,97,0,122,88,85,36.5,Alert,Circulatory,I10,Mild,Discharged
+P0146,36,Male,burning stomach;nausea;epigastric pain;loss of appetite,gastritis,24,91,0,117,66,95,37.4,Alert,Digestive,K29.70,Severe,Admitted
+P0147,60,Male,weakness;fatigue,hypertension;family history of diabetes,18,99,0,95,48,75,36.5,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0148,60,Male,sweating;chest pressure,diabetes,23,95,0,179,113,102,37.2,Alert,Circulatory,I20.9,Severe,Admitted
+P0149,59,Female,blurred vision;palpitations;dizziness;fatigue,hypertension,19,95,0,140,92,80,36.8,Alert,Circulatory,I10,Moderate,Admitted
+P0150,49,Male,sour burp;acidity;indigestion,none,15,98,0,106,67,65,37.5,Alert,Digestive,K21.9,Mild,Discharged
+P0151,1,Female,bloating;constipation;hard stool;abdominal discomfort,irregular bowel habits,19,95,0,132,81,106,37.6,Alert,Digestive,K59.00,Severe,Discharged
+P0152,50,Male,blurred vision;frequent urination,type 2 diabetes;kidney disease,13,97,0,121,76,84,36.9,Alert,Endocrine_Metabolic,E11.65,Mild,Discharged
+P0153,30,Male,fatigue;weight gain,hypertension,13,100,0,117,66,81,36.7,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0154,68,Female,palpitations;blurred vision;dizziness;fatigue,diabetes,17,98,0,131,76,76,36.4,Alert,Circulatory,I10,Mild,Discharged
+P0155,39,Female,pain radiating to leg;back pain;low back pain;stiffness,sedentary job,19,97,0,147,96,96,37.3,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0156,43,Male,acidity;burning chest;heartburn;sour burp,gerd,20,96,0,132,82,98,36.6,Alert,Digestive,K21.9,Moderate,Discharged
+P0157,57,Female,heartburn;sour burp;indigestion,obesity,17,97,0,109,67,83,36.6,Alert,Digestive,K21.9,Moderate,Discharged
+P0158,36,Male,breathlessness on exertion;weight gain,obesity;hypertension,16,95,0,126,79,86,37.1,Alert,Endocrine_Metabolic,E66.9,Moderate,Discharged
+P0159,42,Male,cough;wheezing;chest tightness;breathlessness,smoking,24,93,0,120,70,90,36.9,Alert,Respiratory,J45.909,Moderate,Admitted
+P0160,44,Male,loss of appetite;epigastric pain,gastritis,16,100,0,136,76,76,36.7,Alert,Digestive,K29.70,Mild,Discharged
+P0161,66,Male,back pain;pain radiating to leg;stiffness,sedentary job,17,95,0,130,85,92,36.9,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0162,26,Male,blurred vision;headache;fatigue,hypertension;obesity,18,98,0,152,96,72,36.4,Alert,Circulatory,I10,Mild,Discharged
+P0163,76,Male,swelling in knee;knee pain,previous knee injury,14,97,0,133,83,67,36.8,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0164,16,Other,chest tightness;wheezing;shortness of breath,asthma,14,100,0,120,84,64,36.2,Alert,Respiratory,J45.909,Mild,Discharged
+P0165,60,Female,dizziness;fatigue;palpitations,obesity;smoking,15,98,0,132,85,64,37.0,Alert,Circulatory,I10,Mild,Discharged
+P0166,59,Male,fatigue;blurred vision;increased thirst,hypertension;family history of diabetes,17,98,0,127,70,79,36.6,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0167,56,Male,palpitations;headache;blurred vision,obesity;diabetes,19,96,0,128,79,91,37.2,Alert,Circulatory,I10,Moderate,Discharged
+P0168,73,Female,chest pressure;nausea,high cholesterol;hypertension,15,97,0,134,87,77,37.4,Alert,Circulatory,I20.9,Mild,Discharged
+P0169,66,Male,chest pain;chest pressure;sweating,smoking,25,93,0,136,91,104,37.5,Alert,Circulatory,I20.9,Severe,Admitted
+P0170,41,Female,wheezing;cough,allergic rhinitis,25,95,0,121,67,74,37.2,Alert,Respiratory,J45.909,Moderate,Discharged
+P0171,51,Female,joint stiffness;joint pain;swelling in knee;knee pain,previous knee injury,16,98,0,126,80,75,36.6,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0172,42,Male,frequent urination;fatigue,hypertension,13,95,0,140,87,62,37.0,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0173,18,Female,shortness of breath;breathlessness;cough,none,20,95,0,128,79,84,37.1,Alert,Respiratory,J45.909,Moderate,Discharged
+P0174,33,Female,breathlessness;cough;wheezing,allergic rhinitis,19,92,0,101,53,87,37.5,Alert,Respiratory,J45.909,Moderate,Discharged
+P0175,50,Male,mild fever;tiredness,none,18,99,0,112,71,95,36.2,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0176,61,Male,wheezing;chest tightness;cough;shortness of breath,smoking,19,96,0,139,85,87,37.2,Alert,Respiratory,J45.909,Moderate,Discharged
+P0177,48,Male,running nose;sore throat;cold;cough,asthma,25,93,1,130,78,87,36.8,Alert,Respiratory,J00,Severe,Admitted
+P0178,49,Male,back pain;low back pain;pain radiating to leg,sedentary job,18,98,0,121,79,79,36.8,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0179,57,Female,epigastric pain;vomiting;nausea,none,23,95,0,128,78,97,37.5,Alert,Digestive,K29.70,Severe,Admitted
+P0180,1,Male,mild fever;sore throat;cold;running nose,allergic rhinitis;asthma,18,100,0,112,71,70,37.0,Alert,Respiratory,J00,Mild,Discharged
+P0181,49,Female,constipation;bloating;hard stool,none,17,97,0,113,67,71,36.9,Alert,Digestive,K59.00,Mild,Discharged
+P0182,60,Female,blurred vision;palpitations,none,20,97,0,142,77,68,36.8,Alert,Circulatory,I10,Moderate,Discharged
+P0183,2,Male,mild fever;cough;cold;sore throat,asthma,20,99,0,131,65,73,37.0,Alert,Respiratory,J00,Mild,Discharged
+P0184,76,Female,knee pain;joint pain,previous knee injury;obesity,15,96,0,123,72,88,36.4,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0185,40,Male,nausea;chest pain,high cholesterol,20,95,0,137,82,85,36.7,Alert,Circulatory,I20.9,Moderate,Discharged
+P0186,56,Male,fatigue;frequent urination;increased thirst,obesity;hypertension,19,98,0,133,83,86,36.6,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0187,61,Female,pain radiating to leg;stiffness;low back pain,none,17,98,0,121,81,90,36.3,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0188,5,Female,mild fever;cold,asthma,15,98,0,123,78,78,38.2,Alert,Respiratory,J00,Mild,Discharged
+P0189,38,Female,acidity;burning chest;sour burp,gerd,20,96,0,127,80,80,36.9,Alert,Digestive,K21.9,Moderate,Discharged
+P0190,63,Male,joint pain;swelling in knee,osteoarthritis;previous knee injury,16,100,0,109,76,69,37.0,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0191,22,Male,chest tightness;cough;wheezing,smoking,23,94,0,125,81,93,37.3,Alert,Respiratory,J45.909,Severe,Discharged
+P0192,10,Female,running nose;mild fever;cough,allergic rhinitis,19,99,0,109,61,88,36.9,Alert,Respiratory,J00,Mild,Discharged
+P0193,50,Male,weight gain;joint pain;breathlessness on exertion,hypertension;prediabetes,13,98,0,137,75,73,36.6,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0194,44,Male,stiffness;pain radiating to leg,none,15,98,0,146,96,79,36.3,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0195,58,Female,weakness;increased thirst;frequent urination;blurred vision,family history of diabetes,17,96,0,129,85,83,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0196,44,Male,back pain;low back pain;pain radiating to leg;stiffness,none,22,94,0,146,98,92,37.5,Alert,Musculoskeletal,M54.50,Severe,Discharged
+P0197,50,Female,headache;fatigue;blurred vision,obesity,23,95,0,147,92,84,36.7,Alert,Circulatory,I10,Moderate,Discharged
+P0198,30,Male,sore throat;running nose,allergic rhinitis,19,94,0,143,86,82,36.8,Alert,Respiratory,J00,Moderate,Discharged
+P0199,52,Male,body ache;mild fever;tiredness,recent viral illness,16,97,0,128,89,65,37.1,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0200,47,Other,epigastric pain;loss of appetite;vomiting;nausea,nsaid use,17,99,0,114,70,74,36.8,Alert,Digestive,K29.70,Mild,Discharged
+P0201,51,Male,nausea;chest pain,hypertension,16,95,0,150,98,89,36.9,Alert,Circulatory,I20.9,Moderate,Discharged
+P0202,27,Female,sore throat;running nose;cold;mild fever,allergic rhinitis,14,100,0,116,75,74,37.1,Alert,Respiratory,J00,Mild,Discharged
+P0203,45,Male,cough;cold,none,15,98,0,139,85,88,38.6,Alert,Respiratory,J00,Mild,Discharged
+P0204,35,Female,sour burp;indigestion,gerd,19,96,0,134,76,75,37.1,Alert,Digestive,K21.9,Mild,Discharged
+P0205,61,Female,knee pain;joint pain,osteoarthritis,13,98,0,104,70,67,36.4,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0206,25,Female,constipation;abdominal discomfort;hard stool,irregular bowel habits,14,99,0,103,76,75,36.9,Alert,Digestive,K59.00,Mild,Discharged
+P0207,28,Female,nausea;vomiting;epigastric pain,gastritis,18,95,0,138,87,81,36.6,Alert,Digestive,K29.70,Moderate,Discharged
+P0208,25,Male,mild fever;sore throat,asthma;allergic rhinitis,27,88,0,134,84,79,37.2,Alert,Respiratory,J00,Severe,Admitted
+P0209,48,Female,sour burp;acidity;indigestion;burning chest,gerd,18,98,0,112,63,62,37.2,Alert,Digestive,K21.9,Mild,Discharged
+P0210,28,Female,bloating;hard stool,none,19,100,0,123,71,61,36.8,Alert,Digestive,K59.00,Mild,Discharged
+P0211,38,Female,running nose;cold,allergic rhinitis,17,97,0,124,79,67,36.5,Alert,Respiratory,J00,Mild,Discharged
+P0212,38,Female,vomiting;burning stomach;nausea;epigastric pain,gastritis,18,97,0,112,79,83,36.2,Alert,Digestive,K29.70,Mild,Discharged
+P0213,88,Male,joint pain;swelling in knee,previous knee injury,16,97,0,124,76,66,37.0,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0214,47,Female,nausea;sweating,high cholesterol,21,93,0,149,83,114,37.0,Alert,Circulatory,I20.9,Severe,Admitted
+P0215,55,Male,dizziness;blurred vision;palpitations,diabetes;hypertension,15,98,0,136,85,70,36.7,Alert,Circulatory,I10,Mild,Discharged
+P0216,34,Female,breathlessness on exertion;weight gain;fatigue;joint pain,hypertension,18,99,0,138,86,81,37.3,Alert,Endocrine_Metabolic,E66.9,Moderate,Discharged
+P0217,73,Female,joint stiffness;swelling in knee;knee pain;joint pain,osteoarthritis,20,94,0,143,90,85,36.9,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0218,34,Female,running nose;sore throat,allergic rhinitis,17,99,0,131,76,94,36.5,Alert,Respiratory,J00,Mild,Discharged
+P0219,29,Male,shortness of breath;breathlessness,asthma,24,93,1,120,70,107,37.1,Alert,Respiratory,J45.909,Severe,Admitted
+P0220,54,Male,swelling in knee;knee pain;joint stiffness,previous knee injury,21,95,0,130,79,90,37.0,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0221,50,Male,joint pain;swelling in knee;knee pain;joint stiffness,osteoarthritis,18,96,0,118,69,81,36.9,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0222,45,Female,knee pain;joint stiffness;swelling in knee,none,18,96,0,127,81,89,37.0,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0223,30,Male,low back pain;stiffness;pain radiating to leg,sedentary job,16,98,0,127,80,73,36.7,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0224,54,Male,knee pain;joint pain;swelling in knee;joint stiffness,none,12,99,0,138,96,76,36.6,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0225,47,Female,low back pain;pain radiating to leg,none,14,96,0,117,76,81,37.5,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0226,49,Male,weakness;fatigue,type 2 diabetes,22,97,0,105,58,94,37.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0227,46,Female,nausea;loss of appetite;epigastric pain,gastritis,16,98,0,127,75,79,37.1,Alert,Digestive,K29.70,Mild,Discharged
+P0228,53,Female,cough;cold;mild fever,asthma,13,98,0,133,78,75,36.7,Alert,Respiratory,J00,Mild,Discharged
+P0229,73,Male,joint pain;joint stiffness;knee pain,osteoarthritis;previous knee injury,16,99,0,119,69,77,36.8,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0230,37,Female,pain radiating to leg;stiffness;low back pain;back pain,previous back injury,17,96,0,127,82,76,36.8,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0231,38,Female,back pain;low back pain;stiffness,sedentary job,19,96,0,135,87,94,37.2,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0232,45,Male,heartburn;sour burp,none,15,98,0,120,70,71,36.6,Alert,Digestive,K21.9,Mild,Discharged
+P0233,46,Female,joint stiffness;joint pain;swelling in knee,obesity,18,98,0,114,72,87,37.0,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0234,67,Male,knee pain;joint pain;joint stiffness,obesity;previous knee injury,22,97,0,125,76,87,36.9,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0235,67,Male,fatigue;headache;blurred vision,hypertension;diabetes,13,96,0,151,79,97,36.9,Alert,Circulatory,I10,Moderate,Discharged
+P0236,50,Female,joint pain;joint stiffness;swelling in knee,osteoarthritis,17,98,0,124,73,86,37.2,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0237,68,Female,weakness;increased thirst;blurred vision;frequent urination,type 2 diabetes,19,97,0,113,69,68,36.5,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0238,34,Female,running nose;cold;cough,none,21,93,0,116,68,89,37.3,Alert,Respiratory,J00,Moderate,Admitted
+P0239,53,Male,frequent urination;weakness;blurred vision;nausea,type 2 diabetes,20,94,0,125,81,99,37.7,Alert,Endocrine_Metabolic,E11.65,Severe,Admitted
+P0240,39,Male,loss of appetite;vomiting;burning stomach;nausea,none,22,97,0,130,69,89,37.2,Alert,Digestive,K29.70,Moderate,Admitted
+P0241,53,Female,hard stool;abdominal discomfort,irregular bowel habits,20,95,0,120,74,77,37.0,Alert,Digestive,K59.00,Moderate,Discharged
+P0242,52,Male,joint pain;breathlessness on exertion;weight gain;fatigue,obesity,22,96,0,115,73,87,37.4,Alert,Endocrine_Metabolic,E66.9,Moderate,Discharged
+P0243,43,Male,cold;running nose,none,16,98,0,103,62,83,37.6,Alert,Respiratory,J00,Mild,Discharged
+P0244,72,Male,breathlessness;chest tightness;shortness of breath;wheezing,allergic rhinitis,26,93,1,126,82,87,37.6,Alert,Respiratory,J45.909,Severe,Admitted
+P0245,15,Male,sore throat;mild fever;running nose,none,17,99,0,96,60,78,36.1,Alert,Respiratory,J00,Mild,Discharged
+P0246,53,Female,nausea;epigastric pain,gastritis,16,97,0,130,79,74,36.6,Alert,Digestive,K29.70,Mild,Discharged
+P0247,39,Male,muscle pain;body ache;tiredness,none,14,97,0,126,76,87,36.9,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0248,40,Male,mild fever;tiredness;muscle pain,recent viral illness,21,95,0,135,89,92,36.4,Alert,Musculoskeletal,M79.1,Moderate,Admitted
+P0249,39,Male,chest tightness;cough;shortness of breath;wheezing,allergic rhinitis,25,93,1,111,67,97,37.8,Alert,Respiratory,J45.909,Severe,Admitted
+P0250,75,Male,running nose;sore throat;cough,asthma,18,99,0,127,82,76,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0251,73,Male,chest pressure;sweating;nausea,high cholesterol;hypertension,20,95,0,176,105,109,37.5,Alert,Circulatory,I20.9,Severe,Admitted
+P0252,44,Male,vomiting;epigastric pain,nsaid use,21,93,0,145,96,100,37.0,Alert,Digestive,K29.70,Severe,Discharged
+P0253,40,Male,stiffness;back pain,sedentary job,17,99,0,118,72,81,37.0,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0254,62,Male,indigestion;burning chest;acidity;heartburn,gerd,20,97,0,144,86,85,37.0,Alert,Digestive,K21.9,Moderate,Discharged
+P0255,54,Female,headache;fatigue;dizziness;palpitations,smoking,21,94,0,152,95,108,37.7,Alert,Circulatory,I10,Severe,Discharged
+P0256,42,Male,stiffness;pain radiating to leg;back pain;low back pain,none,14,97,0,116,69,67,36.8,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0257,27,Male,epigastric pain;loss of appetite;nausea,none,18,96,0,119,74,95,36.9,Alert,Digestive,K29.70,Moderate,Discharged
+P0258,54,Female,joint stiffness;knee pain;joint pain;swelling in knee,obesity;osteoarthritis,16,96,0,117,76,88,37.4,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0259,59,Female,joint stiffness;joint pain;knee pain;swelling in knee,obesity,18,95,0,117,70,96,36.9,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0260,53,Male,blurred vision;fatigue,smoking,18,96,0,157,79,94,36.9,Alert,Circulatory,I10,Moderate,Discharged
+P0261,43,Female,body ache;muscle pain,recent viral illness,18,97,0,122,75,91,38.7,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0262,13,Male,cold;cough;sore throat;running nose,allergic rhinitis,26,93,1,120,82,103,37.3,Alert,Respiratory,J00,Severe,Discharged
+P0263,19,Male,mild fever;cold;cough,allergic rhinitis,19,97,0,115,71,74,37.8,Alert,Respiratory,J00,Mild,Discharged
+P0264,59,Female,wheezing;cough,asthma,27,93,1,124,68,108,37.3,Alert,Respiratory,J45.909,Severe,Admitted
+P0265,46,Male,shortness of breath;chest tightness;wheezing,smoking,15,97,0,133,84,84,36.5,Alert,Respiratory,J45.909,Mild,Discharged
+P0266,36,Female,heartburn;burning chest;sour burp,gerd,18,95,0,117,78,80,37.8,Alert,Digestive,K21.9,Moderate,Discharged
+P0267,31,Male,running nose;cold;sore throat,allergic rhinitis,17,97,0,128,85,72,36.7,Alert,Respiratory,J00,Mild,Discharged
+P0268,64,Female,increased thirst;fatigue;weakness,type 2 diabetes,18,97,0,125,82,68,37.5,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0269,28,Female,nausea;epigastric pain;loss of appetite;vomiting,gastritis,23,94,0,124,73,93,37.3,Alert,Digestive,K29.70,Severe,Discharged
+P0270,28,Male,mild fever;running nose,allergic rhinitis,17,98,0,128,94,70,37.4,Alert,Respiratory,J00,Mild,Discharged
+P0271,26,Female,cough;breathlessness;shortness of breath,none,26,93,1,128,75,76,38.1,Alert,Respiratory,J45.909,Severe,Admitted
+P0272,1,Male,burning stomach;loss of appetite;vomiting,none,21,95,0,119,77,85,37.6,Alert,Digestive,K29.70,Severe,Discharged
+P0273,45,Female,back pain;stiffness;low back pain;pain radiating to leg,previous back injury,17,99,0,99,58,65,36.5,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0274,49,Male,fatigue;blurred vision;frequent urination,hypertension,12,98,0,122,70,86,36.7,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0275,21,Male,chest tightness;shortness of breath;cough;wheezing,none,21,95,0,127,77,93,37.1,Alert,Respiratory,J45.909,Moderate,Discharged
+P0276,56,Female,dizziness;palpitations,smoking,21,95,0,131,81,64,36.8,Alert,Circulatory,I10,Moderate,Discharged
+P0277,36,Male,sour burp;acidity;burning chest,gerd;obesity,20,96,0,133,79,91,36.6,Alert,Digestive,K21.9,Moderate,Discharged
+P0278,16,Male,cold;mild fever;running nose;sore throat,asthma,13,99,0,124,80,88,38.0,Alert,Respiratory,J00,Mild,Discharged
+P0279,29,Female,cold;sore throat,none,17,99,0,126,83,82,37.7,Alert,Respiratory,J00,Mild,Discharged
+P0280,46,Female,stiffness;pain radiating to leg,previous back injury,19,94,0,128,71,93,36.9,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0281,39,Female,tiredness;muscle pain;mild fever,recent viral illness,15,98,0,122,76,82,36.6,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0282,45,Female,stiffness;low back pain,none,17,97,0,130,79,92,37.5,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0283,57,Female,sore throat;cough;cold,asthma,17,100,0,118,76,71,38.0,Alert,Respiratory,J00,Mild,Discharged
+P0284,44,Female,low back pain;pain radiating to leg;back pain;stiffness,none,15,99,0,129,76,69,37.4,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0285,39,Female,mild fever;running nose;sore throat;cold,asthma,20,94,0,119,67,78,36.7,Alert,Respiratory,J00,Moderate,Discharged
+P0286,42,Female,acidity;indigestion,gerd,22,94,0,111,76,86,37.1,Alert,Digestive,K21.9,Moderate,Discharged
+P0287,49,Female,running nose;sore throat;cold;cough,allergic rhinitis,16,98,0,116,67,68,37.2,Alert,Respiratory,J00,Mild,Discharged
+P0288,55,Male,joint pain;joint stiffness,osteoarthritis;previous knee injury,21,95,0,122,79,90,36.5,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0289,19,Female,sore throat;mild fever,allergic rhinitis,17,100,0,134,76,86,36.6,Alert,Respiratory,J00,Mild,Discharged
+P0290,48,Female,stiffness;back pain,sedentary job,21,97,0,120,67,83,36.9,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0291,52,Male,weakness;frequent urination;increased thirst,hypertension,16,98,0,115,75,73,37.3,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0292,42,Male,low back pain;back pain;stiffness,sedentary job,21,95,0,119,75,86,37.2,Alert,Musculoskeletal,M54.50,Severe,Admitted
+P0293,14,Male,epigastric pain;nausea,nsaid use,21,95,0,129,81,76,36.8,Alert,Digestive,K29.70,Moderate,Discharged
+P0294,27,Female,mild fever;cough;sore throat;running nose,allergic rhinitis,14,98,0,109,58,88,38.0,Alert,Respiratory,J00,Mild,Discharged
+P0295,36,Male,low back pain;stiffness,none,16,98,0,126,69,65,36.3,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0296,65,Female,weakness;blurred vision;fatigue;frequent urination,hypertension;obesity,21,96,0,130,83,86,36.5,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0297,25,Male,cough;cold;running nose;sore throat,allergic rhinitis,15,98,0,121,71,85,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0298,74,Male,palpitations;fatigue;headache,smoking,18,99,0,117,75,87,36.3,Alert,Circulatory,I10,Mild,Discharged
+P0299,41,Female,dizziness;blurred vision,hypertension;diabetes,19,95,0,163,105,91,37.0,Alert,Circulatory,I10,Moderate,Discharged
+P0300,42,Female,fatigue;increased thirst;frequent urination;weakness,family history of diabetes,18,97,0,115,71,88,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0301,70,Female,dizziness;fatigue;palpitations;blurred vision,obesity;diabetes,16,99,0,150,96,72,36.8,Alert,Circulatory,I10,Mild,Admitted
+P0302,42,Male,heartburn;indigestion;acidity,gerd,19,95,0,139,96,81,36.8,Alert,Digestive,K21.9,Moderate,Discharged
+P0303,22,Male,cough;running nose,allergic rhinitis,18,99,0,134,82,73,37.0,Alert,Respiratory,J00,Mild,Discharged
+P0304,83,Male,weakness;blurred vision;increased thirst,type 2 diabetes,17,97,0,124,76,78,36.6,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0305,50,Male,weakness;increased thirst,hypertension;type 2 diabetes,21,95,0,111,66,68,37.1,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0306,4,Female,running nose;mild fever;cough;cold,asthma,16,98,0,131,78,83,36.9,Alert,Respiratory,J00,Mild,Discharged
+P0307,43,Female,bloating;abdominal discomfort,none,14,98,0,91,53,82,36.6,Alert,Digestive,K59.00,Mild,Discharged
+P0308,62,Male,weakness;frequent urination;increased thirst,family history of diabetes,21,97,0,129,81,83,36.8,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0309,37,Male,increased thirst;weakness;blurred vision;fatigue,hypertension,18,95,0,120,71,78,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0310,39,Female,cough;wheezing;shortness of breath,none,23,91,0,136,84,110,37.3,Alert,Respiratory,J45.909,Severe,Admitted
+P0311,8,Female,sore throat;mild fever;cough;running nose,asthma,15,99,0,102,73,77,37.3,Alert,Respiratory,J00,Mild,Discharged
+P0312,90,Male,shortness of breath;nausea;chest pain;sweating,smoking,13,99,0,110,64,70,36.6,Alert,Circulatory,I20.9,Mild,Discharged
+P0313,64,Male,joint pain;joint stiffness;swelling in knee,previous knee injury;osteoarthritis,19,99,0,120,67,76,36.7,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0314,42,Other,breathlessness on exertion;joint pain;weight gain,hypertension,23,92,0,125,71,97,36.9,Alert,Endocrine_Metabolic,E66.9,Severe,Admitted
+P0315,11,Male,cough;chest tightness;breathlessness;shortness of breath,allergic rhinitis;asthma,25,93,1,119,68,84,37.8,Alert,Respiratory,J45.909,Severe,Discharged
+P0316,23,Male,wheezing;breathlessness;cough,smoking,24,94,0,133,76,84,37.0,Alert,Respiratory,J45.909,Moderate,Discharged
+P0317,34,Female,breathlessness on exertion;weight gain,prediabetes,21,98,0,104,69,74,36.5,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0318,22,Female,acidity;sour burp,none,18,96,0,135,92,89,36.9,Alert,Digestive,K21.9,Moderate,Discharged
+P0319,35,Male,epigastric pain;nausea;burning stomach,none,16,97,0,137,90,74,36.6,Alert,Digestive,K29.70,Mild,Discharged
+P0320,41,Male,stiffness;pain radiating to leg,none,13,98,0,118,80,72,36.6,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0321,41,Male,vomiting;nausea,none,19,96,0,121,66,87,37.0,Alert,Digestive,K29.70,Moderate,Discharged
+P0322,41,Female,weakness;frequent urination,hypertension;type 2 diabetes,15,98,0,128,71,58,36.4,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0323,44,Male,sour burp;heartburn,obesity,21,95,0,127,91,85,36.9,Alert,Digestive,K21.9,Moderate,Discharged
+P0324,58,Male,burning chest;acidity;sour burp;heartburn,gerd,16,98,0,101,63,74,37.1,Alert,Digestive,K21.9,Mild,Discharged
+P0325,53,Male,fatigue;headache;blurred vision,smoking,13,98,0,138,86,83,36.7,Alert,Circulatory,I10,Mild,Discharged
+P0326,72,Female,joint stiffness;swelling in knee;joint pain,osteoarthritis;previous knee injury,16,99,0,140,95,66,36.5,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0327,1,Female,sore throat;cold;running nose,allergic rhinitis,18,97,0,123,77,70,38.5,Alert,Respiratory,J00,Mild,Discharged
+P0328,67,Female,increased thirst;weakness;frequent urination,obesity,18,96,0,139,81,96,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0329,15,Male,pain radiating to leg;stiffness,none,18,97,0,123,83,70,37.2,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0330,63,Female,knee pain;swelling in knee;joint stiffness;joint pain,osteoarthritis,14,98,0,90,52,85,36.7,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0331,66,Female,frequent urination;fatigue;increased thirst;blurred vision,hypertension;family history of diabetes,17,96,0,127,76,83,37.0,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0332,52,Male,increased thirst;weakness;blurred vision,type 2 diabetes,13,98,0,140,81,73,36.9,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0333,55,Male,chest pain;chest pressure;sweating;shortness of breath,high cholesterol,19,96,0,147,89,90,37.2,Alert,Circulatory,I20.9,Moderate,Discharged
+P0334,61,Male,joint pain;swelling in knee;knee pain;joint stiffness,obesity,14,96,0,125,76,80,37.0,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0335,14,Female,cold;mild fever,asthma,17,100,0,141,84,67,37.2,Alert,Respiratory,J00,Mild,Discharged
+P0336,49,Female,frequent urination;increased thirst;blurred vision,hypertension;family history of diabetes,16,98,0,120,76,74,36.6,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0337,19,Male,cough;running nose;cold,allergic rhinitis,16,98,0,110,69,80,36.9,Alert,Respiratory,J00,Mild,Discharged
+P0338,70,Female,joint pain;knee pain;swelling in knee;joint stiffness,none,21,94,0,107,71,92,37.3,Alert,Musculoskeletal,M19.90,Severe,Discharged
+P0339,54,Other,blurred vision;increased thirst,family history of diabetes;hypertension,17,98,0,133,90,65,37.0,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0340,54,Male,heartburn;indigestion,gerd,12,97,0,119,76,76,36.3,Alert,Digestive,K21.9,Mild,Discharged
+P0341,31,Female,heartburn;burning chest;sour burp;acidity,none,18,97,0,138,88,88,36.9,Alert,Digestive,K21.9,Moderate,Admitted
+P0342,20,Male,stiffness;low back pain;pain radiating to leg;back pain,none,19,96,0,109,64,78,36.6,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0343,16,Female,breathlessness;shortness of breath;chest tightness;cough,allergic rhinitis,23,93,0,110,79,88,37.2,Alert,Respiratory,J45.909,Moderate,Discharged
+P0344,52,Male,knee pain;swelling in knee;joint pain,osteoarthritis,20,96,0,123,78,88,37.1,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0345,34,Male,mild fever;cough;sore throat;running nose,none,15,98,0,144,86,71,38.6,Alert,Respiratory,J00,Mild,Discharged
+P0346,45,Female,weakness;blurred vision;frequent urination;fatigue,obesity,16,98,0,125,76,55,36.8,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0347,70,Male,hard stool;constipation,irregular bowel habits,18,97,0,129,83,78,37.0,Alert,Digestive,K59.00,Mild,Admitted
+P0348,59,Male,breathlessness;cough;wheezing;chest tightness,asthma,15,100,0,148,90,88,36.5,Alert,Respiratory,J45.909,Mild,Discharged
+P0349,68,Other,breathlessness;chest tightness;shortness of breath;wheezing,asthma,26,93,1,142,85,90,37.4,Alert,Respiratory,J45.909,Severe,Admitted
+P0350,58,Female,epigastric pain;loss of appetite,gastritis,20,95,0,115,74,77,37.5,Alert,Digestive,K29.70,Moderate,Discharged
+P0351,57,Male,nausea;increased thirst;blurred vision,kidney disease;hypertension,20,96,0,135,79,79,36.3,Alert,Endocrine_Metabolic,E11.65,Moderate,Admitted
+P0352,67,Male,weakness;fatigue;increased thirst,type 2 diabetes;family history of diabetes,18,96,0,130,72,67,36.7,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0353,25,Female,running nose;sore throat;mild fever;cough,allergic rhinitis,16,98,0,117,78,72,37.2,Alert,Respiratory,J00,Mild,Discharged
+P0354,49,Female,cold;running nose,allergic rhinitis,18,94,0,114,67,70,36.8,Alert,Respiratory,J00,Moderate,Discharged
+P0355,45,Male,chest pressure;sweating,diabetes;high cholesterol,20,95,0,123,74,94,37.4,Alert,Circulatory,I20.9,Moderate,Discharged
+P0356,50,Female,body ache;tiredness,none,18,98,0,104,72,84,36.7,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0357,46,Female,cough;breathlessness;wheezing,allergic rhinitis,12,99,0,126,74,76,36.4,Alert,Respiratory,J45.909,Mild,Discharged
+P0358,33,Female,nausea;increased thirst;blurred vision,type 2 diabetes,22,93,0,143,84,84,37.3,Alert,Endocrine_Metabolic,E11.65,Severe,Discharged
+P0359,62,Male,blurred vision;dizziness,diabetes,21,98,0,146,96,88,36.9,Alert,Circulatory,I10,Moderate,Discharged
+P0360,32,Female,cold;sore throat;mild fever;cough,allergic rhinitis,16,98,0,126,74,79,37.8,Alert,Respiratory,J00,Mild,Discharged
+P0361,60,Male,nausea;chest pressure;sweating;chest pain,none,23,95,0,118,83,92,36.5,Confusion,Circulatory,I20.9,Severe,Admitted
+P0362,26,Male,constipation;abdominal discomfort;hard stool;bloating,diabetes,17,98,0,121,77,80,36.9,Alert,Digestive,K59.00,Mild,Discharged
+P0363,67,Male,nausea;weakness;blurred vision,type 2 diabetes;hypertension,18,96,0,126,81,100,37.2,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0364,13,Female,sore throat;mild fever,allergic rhinitis,28,93,1,123,70,91,38.0,Alert,Respiratory,J00,Severe,Admitted
+P0365,71,Female,weakness;fatigue;blurred vision,obesity;hypertension,20,95,0,140,84,77,37.3,Alert,Endocrine_Metabolic,E11.9,Severe,Admitted
+P0366,33,Male,cold;mild fever;cough;sore throat,none,20,93,0,140,79,81,37.1,Alert,Respiratory,J00,Moderate,Discharged
+P0367,39,Female,bloating;abdominal discomfort;constipation;hard stool,irregular bowel habits;diabetes,12,99,0,119,77,81,36.8,Alert,Digestive,K59.00,Mild,Discharged
+P0368,65,Male,pain radiating to leg;back pain;low back pain,previous back injury,16,97,0,125,75,82,36.6,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0369,74,Male,joint stiffness;swelling in knee;knee pain,osteoarthritis,10,99,0,119,74,87,36.9,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0370,67,Female,blurred vision;dizziness,none,21,95,0,134,81,96,37.2,Alert,Circulatory,I10,Moderate,Discharged
+P0371,46,Female,increased thirst;frequent urination;blurred vision,obesity;type 2 diabetes,21,95,0,113,72,89,37.4,Alert,Endocrine_Metabolic,E11.9,Severe,Discharged
+P0372,1,Other,cough;cold;running nose,none,19,98,0,120,76,76,36.7,Alert,Respiratory,J00,Mild,Discharged
+P0373,27,Male,chest tightness;breathlessness;wheezing;cough,allergic rhinitis;smoking,24,95,0,96,53,82,36.9,Alert,Respiratory,J45.909,Moderate,Discharged
+P0374,38,Female,acidity;sour burp;indigestion;heartburn,obesity,13,98,0,112,61,81,37.2,Alert,Digestive,K21.9,Mild,Discharged
+P0375,43,Female,pain radiating to leg;low back pain,previous back injury,17,99,0,128,74,82,36.5,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0376,53,Male,blurred vision;dizziness;fatigue,smoking,15,98,0,130,82,82,36.8,Alert,Circulatory,I10,Mild,Discharged
+P0377,56,Female,back pain;low back pain,none,18,95,0,107,63,85,36.7,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0378,79,Female,joint pain;knee pain,obesity,19,97,0,140,87,85,36.8,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0379,14,Female,cough;chest tightness,smoking;asthma,18,92,0,143,89,71,37.2,Alert,Respiratory,J45.909,Moderate,Discharged
+P0380,51,Male,fatigue;increased thirst;weakness;blurred vision,family history of diabetes;type 2 diabetes,15,99,0,121,80,82,37.3,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0381,52,Female,sore throat;cold;cough;mild fever,none,18,93,0,119,78,93,36.4,Alert,Respiratory,J00,Moderate,Discharged
+P0382,15,Female,bloating;hard stool;constipation;abdominal discomfort,none,15,98,0,122,84,67,36.8,Alert,Digestive,K59.00,Mild,Discharged
+P0383,52,Female,vomiting;nausea;burning stomach;loss of appetite,none,23,93,0,121,72,104,37.5,Alert,Digestive,K29.70,Severe,Admitted
+P0384,69,Male,joint pain;knee pain,obesity,18,96,0,131,83,78,37.0,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0385,37,Female,mild fever;body ache;tiredness,recent viral illness,19,97,0,120,71,71,37.3,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0386,65,Male,swelling in knee;knee pain,previous knee injury,19,97,0,127,75,79,36.7,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0387,63,Male,abdominal discomfort;bloating;hard stool,irregular bowel habits,18,96,0,136,80,84,36.9,Alert,Digestive,K59.00,Moderate,Discharged
+P0388,73,Female,joint stiffness;swelling in knee,previous knee injury;obesity,18,96,0,122,78,87,37.1,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0389,62,Male,wheezing;cough;shortness of breath,none,24,95,0,124,75,74,36.9,Alert,Respiratory,J45.909,Moderate,Discharged
+P0390,82,Male,joint stiffness;swelling in knee,obesity;previous knee injury,14,99,0,118,76,77,36.9,Alert,Musculoskeletal,M19.90,Mild,Admitted
+P0391,1,Female,sore throat;running nose,asthma,18,99,0,129,84,84,38.1,Alert,Respiratory,J00,Mild,Discharged
+P0392,18,Male,loss of appetite;burning stomach,gastritis,16,96,0,122,69,86,36.9,Alert,Digestive,K29.70,Moderate,Discharged
+P0393,59,Male,blurred vision;weakness;fatigue;frequent urination,obesity,25,94,0,136,83,92,37.2,Alert,Endocrine_Metabolic,E11.9,Severe,Admitted
+P0394,1,Female,cold;mild fever;running nose,allergic rhinitis;asthma,17,98,0,110,69,77,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0395,61,Female,fatigue;frequent urination;blurred vision;increased thirst,hypertension;family history of diabetes,20,94,0,124,73,97,37.7,Alert,Endocrine_Metabolic,E11.9,Severe,Admitted
+P0396,60,Female,frequent urination;weakness;blurred vision,obesity,16,98,0,112,69,78,37.3,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0397,9,Female,cold;sore throat;cough;mild fever,asthma,16,97,0,116,73,79,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0398,65,Male,palpitations;fatigue;blurred vision;dizziness,diabetes,22,97,0,131,85,76,37.3,Alert,Circulatory,I10,Moderate,Admitted
+P0399,47,Female,nausea;shortness of breath;chest pressure;sweating,high cholesterol;hypertension,16,98,0,138,95,77,36.8,Alert,Circulatory,I20.9,Mild,Discharged
+P0400,51,Male,weakness;frequent urination;increased thirst;blurred vision,hypertension;family history of diabetes,19,96,0,113,72,96,36.7,Alert,Endocrine_Metabolic,E11.9,Moderate,Admitted
+P0401,35,Male,heartburn;indigestion;sour burp,obesity,16,100,0,113,64,65,36.7,Alert,Digestive,K21.9,Mild,Discharged
+P0402,56,Female,frequent urination;increased thirst;fatigue,family history of diabetes,18,95,0,141,86,84,37.2,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0403,48,Female,fatigue;blurred vision;increased thirst,obesity,19,98,0,119,80,69,36.5,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0404,27,Female,burning chest;acidity;sour burp,none,18,96,0,125,82,80,37.2,Alert,Digestive,K21.9,Moderate,Discharged
+P0405,42,Other,tiredness;muscle pain;body ache,none,17,99,0,107,66,77,38.0,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0406,69,Male,fatigue;headache,smoking,14,97,0,113,63,90,37.1,Alert,Circulatory,I10,Moderate,Discharged
+P0407,56,Male,sweating;chest pressure,smoking,19,96,0,139,92,85,36.8,Alert,Circulatory,I20.9,Moderate,Discharged
+P0408,63,Male,sour burp;indigestion;burning chest,gerd,22,96,0,133,91,75,37.1,Alert,Digestive,K21.9,Moderate,Discharged
+P0409,42,Female,joint stiffness;knee pain;joint pain;swelling in knee,osteoarthritis,17,99,0,129,88,80,36.8,Alert,Musculoskeletal,M19.90,Mild,Discharged
+P0410,63,Male,weakness;fatigue;frequent urination;blurred vision,obesity;hypertension,22,95,0,121,70,76,37.2,Alert,Endocrine_Metabolic,E11.9,Severe,Admitted
+P0411,55,Female,joint pain;swelling in knee;knee pain,previous knee injury,17,94,0,135,80,93,36.8,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0412,31,Female,wheezing;cough,smoking,10,98,0,125,83,78,36.5,Alert,Respiratory,J45.909,Mild,Discharged
+P0413,65,Female,blurred vision;dizziness;fatigue,obesity,18,97,0,152,97,100,36.7,Alert,Circulatory,I10,Moderate,Discharged
+P0414,70,Male,shortness of breath;chest pain;nausea,smoking;hypertension,20,97,0,152,98,93,37.4,Alert,Circulatory,I20.9,Moderate,Discharged
+P0415,54,Female,vomiting;loss of appetite;epigastric pain,nsaid use,17,95,0,128,78,86,37.0,Alert,Digestive,K29.70,Moderate,Discharged
+P0416,55,Female,fatigue;palpitations,hypertension,17,97,0,135,88,72,36.7,Alert,Circulatory,I10,Mild,Discharged
+P0417,61,Female,blurred vision;dizziness;headache,hypertension,15,97,0,149,90,75,36.9,Alert,Circulatory,I10,Mild,Discharged
+P0418,56,Female,acidity;burning chest,gerd,18,97,0,107,68,89,36.9,Alert,Digestive,K21.9,Moderate,Discharged
+P0419,59,Female,epigastric pain;nausea,gastritis,23,93,0,128,78,104,37.3,Alert,Digestive,K29.70,Severe,Discharged
+P0420,73,Male,sweating;chest pressure,none,23,92,0,128,78,96,37.9,Alert,Circulatory,I20.9,Severe,Discharged
+P0421,42,Male,breathlessness;cough,allergic rhinitis,15,98,0,130,80,84,37.2,Alert,Respiratory,J45.909,Mild,Discharged
+P0422,45,Male,sour burp;burning chest;heartburn,obesity,19,98,0,136,84,77,36.1,Alert,Digestive,K21.9,Mild,Discharged
+P0423,39,Female,cough;wheezing,allergic rhinitis,20,94,0,139,90,93,37.3,Alert,Respiratory,J45.909,Moderate,Discharged
+P0424,78,Female,mild fever;body ache;tiredness,none,18,96,0,134,87,102,37.0,Alert,Musculoskeletal,M79.1,Moderate,Discharged
+P0425,47,Male,body ache;muscle pain,none,18,98,0,117,79,71,36.0,Alert,Musculoskeletal,M79.1,Moderate,Discharged
+P0426,57,Female,joint stiffness;swelling in knee;joint pain;knee pain,previous knee injury,21,95,0,123,70,84,36.9,Alert,Musculoskeletal,M19.90,Moderate,Admitted
+P0427,36,Female,abdominal discomfort;hard stool;constipation;bloating,none,18,95,0,133,81,78,36.5,Alert,Digestive,K59.00,Moderate,Discharged
+P0428,63,Male,nausea;increased thirst,kidney disease,16,99,0,117,76,83,37.1,Alert,Endocrine_Metabolic,E11.65,Mild,Discharged
+P0429,48,Male,blurred vision;frequent urination;increased thirst;weakness,type 2 diabetes;hypertension,19,96,0,107,59,81,36.9,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0430,51,Male,fatigue;dizziness;blurred vision,diabetes;hypertension,16,100,0,134,81,70,36.5,Alert,Circulatory,I10,Mild,Discharged
+P0431,82,Male,fatigue;increased thirst;weakness,family history of diabetes;hypertension,21,95,0,125,73,94,37.2,Alert,Endocrine_Metabolic,E11.9,Severe,Admitted
+P0432,31,Female,breathlessness;chest tightness;wheezing;cough,allergic rhinitis,23,90,0,124,77,93,37.2,Alert,Respiratory,J45.909,Severe,Discharged
+P0433,63,Female,cough;cold;running nose;mild fever,none,15,98,0,125,79,74,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0434,41,Male,pain radiating to leg;low back pain;stiffness;back pain,none,14,99,0,114,64,70,37.1,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0435,22,Male,constipation;hard stool;bloating;abdominal discomfort,irregular bowel habits,19,99,0,103,66,77,36.5,Alert,Digestive,K59.00,Mild,Discharged
+P0436,29,Female,breathlessness;shortness of breath,asthma,23,95,0,123,81,73,36.8,Alert,Respiratory,J45.909,Moderate,Discharged
+P0437,55,Female,nausea;chest pressure;chest pain;sweating,smoking,16,95,0,141,90,107,37.4,Alert,Circulatory,I20.9,Moderate,Discharged
+P0438,61,Female,blurred vision;weakness;nausea;frequent urination,hypertension;type 2 diabetes,22,98,0,117,69,93,37.4,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0439,14,Female,abdominal discomfort;constipation;hard stool;bloating,none,18,98,0,116,65,76,36.7,Alert,Digestive,K59.00,Mild,Discharged
+P0440,45,Male,breathlessness;shortness of breath;chest tightness,smoking,25,90,0,133,85,96,37.3,Alert,Respiratory,J45.909,Severe,Admitted
+P0441,49,Male,back pain;stiffness;pain radiating to leg,sedentary job,19,99,0,124,73,90,36.6,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0442,50,Male,muscle pain;tiredness;mild fever;body ache,recent viral illness,15,97,0,132,79,76,36.5,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0443,67,Female,joint stiffness;joint pain;swelling in knee;knee pain,previous knee injury,18,97,0,115,62,73,37.1,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0444,74,Male,palpitations;dizziness,smoking,14,96,0,147,93,69,36.9,Alert,Circulatory,I10,Mild,Discharged
+P0445,8,Male,chest tightness;shortness of breath;breathlessness,smoking;allergic rhinitis,20,94,0,126,77,88,37.5,Alert,Respiratory,J45.909,Moderate,Discharged
+P0446,45,Female,epigastric pain;loss of appetite,none,19,97,0,134,92,87,36.9,Alert,Digestive,K29.70,Moderate,Discharged
+P0447,95,Female,mild fever;running nose;cold;cough,asthma,20,98,0,122,88,71,36.8,Alert,Respiratory,J00,Mild,Discharged
+P0448,27,Male,mild fever;sore throat,allergic rhinitis,17,98,0,104,70,78,36.9,Alert,Respiratory,J00,Mild,Discharged
+P0449,57,Female,fatigue;frequent urination;blurred vision,family history of diabetes;obesity,14,98,0,143,91,74,36.9,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0450,30,Female,shortness of breath;chest tightness;breathlessness;wheezing,asthma;smoking,22,93,0,151,90,75,36.9,Alert,Respiratory,J45.909,Moderate,Admitted
+P0451,63,Male,increased thirst;blurred vision,hypertension;type 2 diabetes,15,97,0,111,73,85,36.9,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0452,43,Male,burning chest;heartburn;acidity,obesity,21,95,0,110,74,99,37.5,Alert,Digestive,K21.9,Severe,Admitted
+P0453,68,Male,blurred vision;frequent urination;weakness,kidney disease;hypertension,16,99,0,123,80,88,36.8,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0454,50,Female,nausea;frequent urination,kidney disease,17,96,0,120,72,89,36.8,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0455,26,Male,cough;sore throat,allergic rhinitis;asthma,22,95,0,125,74,87,36.8,Alert,Respiratory,J00,Moderate,Discharged
+P0456,49,Female,abdominal discomfort;hard stool;bloating;constipation,none,16,99,0,116,67,75,36.6,Alert,Digestive,K59.00,Mild,Discharged
+P0457,55,Male,dizziness;fatigue;headache,diabetes,18,96,0,142,89,99,37.1,Alert,Circulatory,I10,Moderate,Admitted
+P0458,5,Male,shortness of breath;breathlessness;chest tightness;wheezing,none,14,98,0,120,77,74,36.8,Alert,Respiratory,J45.909,Mild,Discharged
+P0459,49,Male,low back pain;pain radiating to leg,previous back injury,16,98,0,100,59,74,36.8,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0460,59,Male,muscle pain;body ache,recent viral illness,16,99,0,123,83,82,38.2,Alert,Musculoskeletal,M79.1,Mild,Admitted
+P0461,47,Other,back pain;pain radiating to leg;low back pain;stiffness,previous back injury,16,97,0,109,67,88,36.0,Alert,Musculoskeletal,M54.50,Mild,Admitted
+P0462,40,Female,back pain;stiffness;low back pain;pain radiating to leg,sedentary job,19,97,0,105,67,77,37.1,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0463,70,Female,running nose;cough;sore throat,allergic rhinitis,17,99,0,130,79,68,37.7,Alert,Respiratory,J00,Mild,Admitted
+P0464,54,Female,back pain;stiffness;pain radiating to leg;low back pain,none,21,94,0,128,84,74,38.2,Alert,Musculoskeletal,M54.50,Severe,Admitted
+P0465,33,Female,sore throat;running nose;cold,asthma,14,97,0,117,76,81,37.2,Alert,Respiratory,J00,Mild,Discharged
+P0466,68,Male,mild fever;muscle pain;tiredness,none,16,99,0,106,63,84,38.5,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0467,28,Male,abdominal discomfort;constipation,diabetes,20,99,0,121,71,76,36.5,Alert,Digestive,K59.00,Mild,Discharged
+P0468,48,Male,weight gain;fatigue;breathlessness on exertion;joint pain,hypertension;obesity,11,98,0,102,70,78,36.5,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0469,31,Male,heartburn;sour burp;burning chest,obesity,16,99,0,118,63,85,36.6,Alert,Digestive,K21.9,Mild,Discharged
+P0470,40,Female,palpitations;headache;blurred vision,smoking,21,97,0,133,80,86,36.4,Alert,Circulatory,I10,Moderate,Discharged
+P0471,63,Male,joint pain;weight gain;fatigue;breathlessness on exertion,prediabetes;obesity,23,95,0,129,78,84,37.1,Alert,Endocrine_Metabolic,E66.9,Moderate,Discharged
+P0472,25,Male,fatigue;weight gain;breathlessness on exertion;joint pain,none,15,97,0,141,84,80,36.9,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0473,51,Female,stiffness;low back pain,sedentary job;previous back injury,16,98,0,123,76,77,37.1,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0474,38,Female,body ache;mild fever,none,12,96,0,94,59,77,36.5,Alert,Musculoskeletal,M79.1,Mild,Discharged
+P0475,60,Female,low back pain;back pain;stiffness,sedentary job,23,92,0,122,68,97,36.7,Alert,Musculoskeletal,M54.50,Severe,Admitted
+P0476,45,Male,nausea;blurred vision;weakness;increased thirst,kidney disease,21,96,0,127,81,102,37.8,Alert,Endocrine_Metabolic,E11.65,Severe,Discharged
+P0477,55,Female,heartburn;burning chest;acidity,obesity,19,99,0,126,84,64,36.3,Alert,Digestive,K21.9,Mild,Discharged
+P0478,64,Other,joint pain;swelling in knee;knee pain,obesity;osteoarthritis,25,94,0,128,79,92,36.9,Alert,Musculoskeletal,M19.90,Severe,Discharged
+P0479,47,Male,low back pain;stiffness;pain radiating to leg;back pain,none,22,97,0,126,75,72,36.6,Alert,Musculoskeletal,M54.50,Moderate,Discharged
+P0480,30,Female,breathlessness on exertion;weight gain;joint pain;fatigue,prediabetes,16,98,0,94,56,75,36.8,Alert,Endocrine_Metabolic,E66.9,Mild,Discharged
+P0481,44,Male,back pain;pain radiating to leg;stiffness;low back pain,previous back injury,21,94,0,127,75,85,37.3,Alert,Musculoskeletal,M54.50,Severe,Admitted
+P0482,60,Male,cough;cold;running nose,none,16,99,0,122,77,89,36.2,Alert,Respiratory,J00,Mild,Discharged
+P0483,29,Male,acidity;heartburn;burning chest;indigestion,none,23,96,0,138,81,92,37.3,Alert,Digestive,K21.9,Severe,Discharged
+P0484,60,Male,fatigue;palpitations,diabetes,22,95,0,143,87,91,37.3,Alert,Circulatory,I10,Moderate,Discharged
+P0485,30,Male,frequent urination;increased thirst;weakness;blurred vision,family history of diabetes,18,98,0,137,96,73,36.2,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0486,76,Female,palpitations;dizziness;blurred vision;fatigue,hypertension,23,95,0,171,113,98,37.5,Alert,Circulatory,I10,Severe,Discharged
+P0487,33,Male,blurred vision;fatigue;increased thirst;weakness,type 2 diabetes,18,98,0,129,67,84,36.7,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0488,41,Female,nausea;blurred vision;frequent urination,type 2 diabetes,19,97,0,111,73,82,36.4,Alert,Endocrine_Metabolic,E11.65,Mild,Discharged
+P0489,58,Female,knee pain;swelling in knee;joint stiffness;joint pain,osteoarthritis,16,96,0,129,81,80,37.2,Alert,Musculoskeletal,M19.90,Moderate,Discharged
+P0490,54,Female,stiffness;back pain;low back pain;pain radiating to leg,previous back injury,21,97,0,122,69,62,36.6,Alert,Musculoskeletal,M54.50,Mild,Discharged
+P0491,68,Female,increased thirst;blurred vision,type 2 diabetes,20,96,0,139,83,91,36.4,Alert,Endocrine_Metabolic,E11.65,Moderate,Discharged
+P0492,58,Male,sweating;shortness of breath;nausea,smoking,20,96,0,120,77,81,37.2,Alert,Circulatory,I20.9,Moderate,Discharged
+P0493,13,Female,mild fever;cough;sore throat;cold,asthma,19,97,0,127,85,78,38.1,Alert,Respiratory,J00,Mild,Discharged
+P0494,47,Female,cough;wheezing,none,16,99,0,116,76,89,37.1,Alert,Respiratory,J45.909,Mild,Discharged
+P0495,64,Female,weakness;fatigue;blurred vision,type 2 diabetes,21,97,0,116,71,102,37.2,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0496,24,Male,fatigue;increased thirst,hypertension,21,97,0,151,90,86,36.9,Alert,Endocrine_Metabolic,E11.9,Moderate,Discharged
+P0497,43,Male,weakness;fatigue;frequent urination,hypertension;family history of diabetes,15,98,0,115,75,73,37.3,Alert,Endocrine_Metabolic,E11.9,Mild,Discharged
+P0498,9,Female,running nose;sore throat,none,12,97,0,133,76,82,36.6,Alert,Respiratory,J00,Mild,Discharged
+P0499,59,Male,blurred vision;dizziness;fatigue;headache,diabetes,17,98,0,143,94,83,37.0,Alert,Circulatory,I10,Mild,Discharged
+P0500,46,Female,body ache;muscle pain;tiredness;mild fever,recent viral illness,16,99,0,139,81,62,37.5,Alert,Musculoskeletal,M79.1,Mild,Discharged
