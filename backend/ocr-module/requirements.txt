@@ -8,3 +8,6 @@ Pillow>=10.0
 python-dateutil>=2.9
 pytest>=8.0
 httpx>=0.27
+# Task 1 and Task 2 (member 3)
+opencv-python-headless>=4.9
+spacy>=3.7
