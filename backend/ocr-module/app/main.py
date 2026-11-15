@@ -86,6 +86,7 @@ async def upload_document(
     backend: str = Form("auto"),
     document_type_hint: str | None = Form(None),
     session_id: str = Form(...),
+    clean_image: bool = Form(False),  # Task 1: run OpenCV cleanup first
     file: UploadFile = File(...),
 ):
     if backend not in VALID_BACKENDS:
@@ -106,6 +107,14 @@ async def upload_document(
     mime_type = file.content_type
     if not mime_type or not mime_type.startswith(("image/", "application/pdf")):
         raise HTTPException(400, "unsupported file type (must be image or pdf)")
+
+    if clean_image and mime_type.startswith("image/"):
+        from .preprocess import preprocess  # imported here so the service still starts without OpenCV
+        try:
+            raw = preprocess(raw)
+            mime_type = "image/png"
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
 
     print(f"[{session_id}] document upload: {file.filename} ({len(raw)} bytes) -> {resolved_backend} engine")
 
