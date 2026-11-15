@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MediKiosk — Hospital Outpatient Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; }
+    .container { max-width: 960px; width: 100%; text-align: center; }
+    .header { margin-bottom: 36px; }
+    .header h1 { font-size: 32px; color: #38bdf8; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; }
+    .header p { color: #94a3b8; font-size: 15px; }
+    
+    .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 20px; }
+    .role-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px 24px; text-decoration: none; color: inherit; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; overflow: hidden; }
+    .role-card:hover { transform: translateY(-4px); border-color: #38bdf8; box-shadow: 0 12px 24px -10px rgba(56, 189, 248, 0.3); }
+    
+    .icon-bubble { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 18px; }
+    .patient-bubble { background: #064e3b; color: #34d399; }
+    .nurse-bubble { background: #78350f; color: #f59e0b; }
+    .doctor-bubble { background: #0c4a6e; color: #38bdf8; }
+    
+    .role-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .role-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
+    .btn-enter { background: #0284c7; color: white; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; width: 100%; }
+    .patient-btn { background: #059669; }
+    .nurse-btn { background: #d97706; }
+    
+    .footer { margin-top: 40px; font-size: 12px; color: #64748b; }
+    .badge { display: inline-block; background: #334155; color: #cbd5e1; padding: 3px 8px; border-radius: 999px; font-size: 11px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🏥 MediKiosk Integrated Portal</h1>
+      <p>AI Clinical Intake • WHO ICD-10 Diagnostics • NEWS2 Triaging • FHIR Interoperability</p>
+    </div>
+
+    <div class="role-grid">
+      <!-- 1. Patient Kiosk Card -->
+      <a href="/kiosk" class="role-card">
+        <span class="badge">Entrance Self-Service</span>
+        <div class="icon-bubble patient-bubble">🧑‍🦽</div>
+        <div class="role-title">1. Patient Kiosk</div>
+        <div class="role-desc">Walk-in OPD patient self-service. Turn-by-turn bilingual intake interview (SOCRATES) & prescription document scanning.</div>
+        <div class="btn-enter patient-btn">Begin Patient Check-In →</div>
+      </a>
+
+      <!-- 2. Triage Nurse Station Card -->
+      <a href="/doctor.html#vitals" class="role-card">
+        <span class="badge">Triage Desk</span>
+        <div class="icon-bubble nurse-bubble">👩‍⚕️</div>
+        <div class="role-title">2. Nurse Triage Station</div>
+        <div class="role-desc">Record vital signs (BP, SpO2, Pulse, Temp). Instant deterministic NEWS2 physiological early-warning score calculation.</div>
+        <div class="btn-enter nurse-btn">Open Nurse Vitals Station →</div>
+      </a>
+
+      <!-- 3. Doctor CDS Dashboard Card -->
+      <a href="/doctor.html" class="role-card">
+        <span class="badge">Consultation Room</span>
+        <div class="icon-bubble doctor-bubble">🩺</div>
+        <div class="role-title">3. Doctor CDS Dashboard</div>
+        <div class="role-desc">Comprehensive 5-panel Clinical Decision Support: Live queue, ICD-10 codes, NEWS2 status, ML risk & FHIR export.</div>
+        <div class="btn-enter">Open Physician Dashboard →</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      Hospital: <strong>Civil Outpatient Center (OPD)</strong> | Conforms to ABDM & WHO ICD-10 Standards
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,6 +1,4 @@
-﻿from app.fhir_exporter import generate_fhir_bundle
-from app.news2_engine import calculate_news2
-"""
+﻿"""
 MediKiosk â€” Patient Kiosk backend.
 
 This module does NOT re-implement intake, OCR, or speech-to-text. It's a
@@ -39,6 +37,8 @@ Explicitly OUT of scope here:
     without adding real staff auth first.
 """
 from __future__ import annotations
+from app.news2_engine import calculate_news2
+from app.fhir_exporter import generate_fhir_bundle
 
 import time
 from contextlib import asynccontextmanager
@@ -480,7 +480,15 @@ templates = Jinja2Templates(directory=str(_templates_dir))
 # didn't need splitting.
 
 
+@app.get("/kiosk", response_class=HTMLResponse, include_in_schema=False)
+async def serve_kiosk(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(request, "index.html")
+
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
+async def serve_home_portal(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(request, "home.html")
+# old root replaced
+#
 async def serve_index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "index.html")
 
@@ -523,3 +531,8 @@ async def get_visit_fhir(token: str):
         raise HTTPException(status_code=404, detail="Visit not found")
     bundle = generate_fhir_bundle(visit)
     return bundle
+
+
+
+
+
