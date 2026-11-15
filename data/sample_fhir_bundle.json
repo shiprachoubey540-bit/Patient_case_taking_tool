@@ -1,0 +1,203 @@
+{
+  "resourceType": "Bundle",
+  "id": "644a1c3f-bf85-4a8a-8877-4cb5e119ce41",
+  "type": "collection",
+  "timestamp": "2026-11-15T06:00:22.173204+00:00",
+  "total": 4,
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:d03e3da7-a954-4529-b94f-697aa27ea3ff",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-SBYHHS",
+        "identifier": [
+          {
+            "system": "https://medikiosk.abdm.gov.in/identifiers/patient",
+            "value": "SBYHHS"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "text": "Patient SBYHHS"
+          }
+        ],
+        "gender": "male"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:40589503-d7fd-441b-98ff-484532a4a428",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-SBYHHS-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "K21.9",
+              "display": "Gastro-esophageal reflux disease without esophagitis (GERD)"
+            }
+          ],
+          "text": "Severe burning sensation in stomach after meals for 2 weeks"
+        },
+        "subject": {
+          "reference": "urn:uuid:d03e3da7-a954-4529-b94f-697aa27ea3ff"
+        },
+        "recordedDate": "2026-11-15T06:00:22.173204+00:00"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c8f6126f-ad9a-4197-934c-f232eaf66e2b",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-SBYHHS-2",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus without complications (Prameha)"
+            }
+          ],
+          "text": "Severe burning sensation in stomach after meals for 2 weeks"
+        },
+        "subject": {
+          "reference": "urn:uuid:d03e3da7-a954-4529-b94f-697aa27ea3ff"
+        },
+        "recordedDate": "2026-11-15T06:00:22.173204+00:00"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:3b72fb42-a6e6-4841-b379-f8624f08b96a",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "observation-news2-SBYHHS",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey",
+                "display": "Survey"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "https://rcplondon.ac.uk/news2",
+              "code": "NEWS2",
+              "display": "National Early Warning Score 2"
+            }
+          ],
+          "text": "NEWS2 Composite Clinical Risk Score"
+        },
+        "subject": {
+          "reference": "urn:uuid:d03e3da7-a954-4529-b94f-697aa27ea3ff"
+        },
+        "effectiveDateTime": "2026-11-15T06:00:22.173204+00:00",
+        "valueInteger": 1,
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "LOW",
+                "display": "Low Risk"
+              }
+            ]
+          }
+        ],
+        "component": [
+          {
+            "code": {
+              "text": "Systolic Blood Pressure"
+            },
+            "valueQuantity": {
+              "value": 128,
+              "unit": "mmHg"
+            }
+          },
+          {
+            "code": {
+              "text": "Heart Rate / Pulse"
+            },
+            "valueQuantity": {
+              "value": 76,
+              "unit": "beats/min"
+            }
+          },
+          {
+            "code": {
+              "text": "SpO2 (Oxygen Saturation)"
+            },
+            "valueQuantity": {
+              "value": 98,
+              "unit": "%"
+            }
+          },
+          {
+            "code": {
+              "text": "Respiration Rate"
+            },
+            "valueQuantity": {
+              "value": 18,
+              "unit": "breaths/min"
+            }
+          },
+          {
+            "code": {
+              "text": "Body Temperature"
+            },
+            "valueQuantity": {
+              "value": 37.0,
+              "unit": "Cel"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -241,6 +241,44 @@ function renderDetail(data) {
   out += section("Drug allergies", list(h.drug_allergy_history));
   out += section("Family history", list(h.family_history));
 
+    // --- NEWS2 & Nurse Vitals Section ---
+  const vts = v.vitals || {};
+  const news = vts.news2 || {};
+  let newsBadgeHtml = '<span class="badge" style="background:#64748b; color:white;">No vitals recorded yet</span>';
+  
+  if (news.total_score !== undefined) {
+    const bg = news.badge_color === 'red' ? '#dc2626' : (news.badge_color === 'amber' ? '#d97706' : '#16a34a');
+    newsBadgeHtml = `<span class="badge" style="background:${bg}; color:white; font-size:13px; font-weight:bold; padding:4px 10px; border-radius:6px;">
+      NEWS2 Score: ${news.total_score} (${news.risk_level} Risk)
+    </span> <span style="font-size:12px; color:#475569; margin-left:8px;">${news.clinical_action || ''}</span>`;
+  }
+
+  const vitalsFormHtml = `
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-top:8px;">
+      <div style="margin-bottom:10px;">${newsBadgeHtml}</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px; font-size:12px;">
+        <div><label style="display:block; font-weight:600; color:#334155;">Resp Rate (/min)</label><input type="number" id="v_rr" value="${vts.respiratory_rate || ''}" placeholder="12-20" style="width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+        <div><label style="display:block; font-weight:600; color:#334155;">SpO2 (%)</label><input type="number" id="v_spo2" value="${vts.spo2 || ''}" placeholder="96-100" style="width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+        <div><label style="display:block; font-weight:600; color:#334155;">Systolic BP (mmHg)</label><input type="number" id="v_sbp" value="${vts.systolic_bp || ''}" placeholder="110-130" style="width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+        <div><label style="display:block; font-weight:600; color:#334155;">Pulse (bpm)</label><input type="number" id="v_hr" value="${vts.pulse || ''}" placeholder="60-90" style="width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+        <div><label style="display:block; font-weight:600; color:#334155;">Temp (°C)</label><input type="number" step="0.1" id="v_temp" value="${vts.temperature_c || ''}" placeholder="36.5-37.5" style="width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+      </div>
+      <button onclick="submitNurseVitals('${v.token}')" style="margin-top:10px; background:#0284c7; color:white; border:none; padding:6px 14px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer;">Save Vitals & Compute NEWS2</button>
+    </div>
+  `;
+  out += section("Triage Vitals & NEWS2 Clinical Score", vitalsFormHtml);
+  
+  // FHIR R4 Export Section
+  const fhirHtml = `
+    <div style="margin-top:6px;">
+      <a href="/api/visits/${v.token}/fhir" target="_blank" style="display:inline-block; background:#0f172a; color:#38bdf8; text-decoration:none; font-weight:600; font-size:12px; padding:6px 12px; border-radius:6px; border:1px solid #334155;">
+        ⬇ Export FHIR R4 JSON Bundle (ABDM Interoperability)
+      </a>
+      <span style="font-size:11px; color:#64748b; margin-left:8px;">Ready for hospital EHR / EMR integration</span>
+    </div>
+  `;
+  out += section("Healthcare Standards & Interoperability", fhirHtml);
+
   if (data.documents && data.documents.length) {
     const docHtml = data.documents.map(d => {
       const ex = d.extracted || {};
@@ -271,9 +309,35 @@ $("lookup-input").addEventListener("keydown", (e) => { if (e.key === "Enter") lo
 
 loadQueue();
 setInterval(loadQueue, 10000);
+async function submitNurseVitals(token) {
+  const payload = {
+    respiratory_rate: parseInt(document.getElementById("v_rr").value) || null,
+    spo2: parseInt(document.getElementById("v_spo2").value) || null,
+    systolic_bp: parseInt(document.getElementById("v_sbp").value) || null,
+    pulse: parseInt(document.getElementById("v_hr").value) || null,
+    temperature_c: parseFloat(document.getElementById("v_temp").value) || null,
+    consciousness: "Alert"
+  };
+  try {
+    const res = await fetch(`/api/visits/${token}/vitals`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      lookup(); // reload and refresh UI with live badge!
+    } else {
+      alert("Failed to save vitals.");
+    }
+  } catch (err) {
+    alert("Error connecting to server: " + err);
+  }
+}
 </script>
 </body>
 </html>
+
+
 
 
 

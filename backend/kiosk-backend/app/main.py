@@ -1,15 +1,17 @@
+﻿from app.fhir_exporter import generate_fhir_bundle
+from app.news2_engine import calculate_news2
 """
-MediKiosk — Patient Kiosk backend.
+MediKiosk â€” Patient Kiosk backend.
 
 This module does NOT re-implement intake, OCR, or speech-to-text. It's a
 thin orchestration layer in front of three independent services
 (converse-module on CONVERSE_URL, ocr-module on OCR_URL, voice-module on
-VOICE_URL — default localhost:8000 / :8001 / :8003):
+VOICE_URL â€” default localhost:8000 / :8001 / :8003):
 
   - creates one "visit" per patient check-in, and ties together the
     Converse-module session_id and the OCR-module session_id (they're kept
     as separate concepts internally, since that's how the services already
-    work — the kiosk just makes sure both get the same visit id)
+    work â€” the kiosk just makes sure both get the same visit id)
   - proxies conversation turns, document uploads, and voice-clip
     transcription through to the right service
   - exposes one GET /visits/{id}/summary that pulls the intake + documents
@@ -17,20 +19,20 @@ VOICE_URL — default localhost:8000 / :8001 / :8003):
     juggling multiple origins and merge logic itself
 
 Explicitly OUT of scope here:
-  - the actual intake questions / extraction logic — those live in the two
+  - the actual intake questions / extraction logic â€” those live in the two
     services this proxies to
-  - auth / patient identity verification — patient_name is a free-text
+  - auth / patient identity verification â€” patient_name is a free-text
     display label typed at the kiosk, not a verified identity. A real
     deployment would need ABHA/patient-ID lookup here; deliberately not
     faked for a demo. The doctor-facing lookup below (by `token`) has the
     SAME limitation one level up: token identifies a visit THIS kiosk
-    created, not a verified patient — see store.py's docstring.
-  - persistence for converse-module/ocr-module's OWN live session state —
+    created, not a verified patient â€” see store.py's docstring.
+  - persistence for converse-module/ocr-module's OWN live session state â€”
     see db.py's module docstring for exactly what this module's own
     persistence layer does and doesn't cover. Short version: a kiosk-backend
     restart is now survivable; a converse-module/ocr-module restart
     mid-interview still isn't.
-  - auth on the doctor-facing endpoints/page below — same "not faked for a
+  - auth on the doctor-facing endpoints/page below â€” same "not faked for a
     demo" stance as patient identity. Anyone who can reach this service can
     reach /doctor.html and every /doctor/... endpoint. Fine for a kiosk on a
     trusted local network during a pilot; NOT fine to expose past that
@@ -53,13 +55,13 @@ from starlette.background import BackgroundTask
 
 from . import clients, db, store
 
-# Must happen before clients.py's converse_url()/ocr_url() read os.environ —
+# Must happen before clients.py's converse_url()/ocr_url() read os.environ â€”
 # a missing load_dotenv() call has already bitten this project once (the
 # Converse module silently never read its .env until this was added there).
 load_dotenv()
 
 # Mirrors converse-module/app/main.py's _TRIAGE_ORDER (that module owns the
-# real definition — this is a display-ordering copy for the doctor queue,
+# real definition â€” this is a display-ordering copy for the doctor queue,
 # not clinical logic of its own). Keep in sync if that list ever changes;
 # an unrecognized/null value sorts last rather than raising, since a visit
 # with no triage_level yet (first turn, or a non-Ollama/Gemini backend
@@ -75,7 +77,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="MediKiosk — Patient Kiosk", lifespan=lifespan)
+app = FastAPI(title="MediKiosk â€” Patient Kiosk", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -89,7 +91,7 @@ VALID_BACKENDS = {"auto", "gemini", "ollama", "mock"}
 
 def ocr_backend_for(visit: store.Visit) -> str:
     """The OCR module has no vision-capable Ollama backend wired up (see its
-    README — noted as a future option, not built). If the visit was started
+    README â€” noted as a future option, not built). If the visit was started
     with "ollama", silently sending that to OCR would just 400. Rather than
     surface that as a confusing failure on the upload screen, fall back to
     "auto" for OCR calls specifically and say so via the /visits/{id} status
@@ -101,7 +103,7 @@ class StartVisitRequest(BaseModel):
     patient_name: Optional[str] = None
     ayush_mode: bool = False
     backend: str = "auto"
-    language: str = "en"  # interview language, e.g. "en" | "hi" — validated by the Converse module itself
+    language: str = "en"  # interview language, e.g. "en" | "hi" â€” validated by the Converse module itself
 
 
 class MessageRequest(BaseModel):
@@ -113,7 +115,7 @@ async def list_backends():
     """Merged availability from both downstream services, so the kiosk's
     check-in screen can grey out a backend option without a patient hitting
     a failure mid-conversation. If a service is unreachable entirely, its
-    section says so rather than the whole endpoint failing — the check-in
+    section says so rather than the whole endpoint failing â€” the check-in
     screen should still work with whatever IS up."""
     try:
         converse = await clients.converse_backends()
@@ -145,9 +147,9 @@ async def _build_summary(visit: store.Visit) -> dict:
     needs in one call: the visit's own metadata, the structured intake
     history, and whatever documents were scanned. Intake is the core of
     this module and its failure is surfaced normally (a patient can't
-    confirm a history that failed to load). The document scan is optional —
+    confirm a history that failed to load). The document scan is optional â€”
     a patient may not have uploaded anything, or the OCR service may be down
-    while intake still works — so a connection failure there degrades to an
+    while intake still works â€” so a connection failure there degrades to an
     empty list with a note instead of blocking the whole confirmation
     screen. Factored out of the /summary endpoint (2026-09-11) so
     _persist_snapshot below can build the exact same shape without
@@ -172,22 +174,22 @@ async def _build_summary(visit: store.Visit) -> dict:
 
 async def _persist_snapshot(visit: store.Visit) -> dict:
     """Builds the current summary and writes it to db.py, so staff can see
-    the latest known state of a visit even across a kiosk-backend restart —
+    the latest known state of a visit even across a kiosk-backend restart â€”
     see db.py's module docstring for exactly what that does and doesn't
     cover. Called after every mutation (visit creation, each message, each
-    document upload), not just at completion — an interview that's only
+    document upload), not just at completion â€” an interview that's only
     half-done when the process dies is exactly the case this exists for.
     Also updates visit.complete/red_flag/triage_level in the in-memory
     store, since main.py is the only place that ever learns those values
     (store.py itself only tracks what it's told). Returns the summary it
-    built (or None if persistence failed — see below), so callers that
+    built (or None if persistence failed â€” see below), so callers that
     already need it (start_visit, post_message, upload_document) don't have
     to build it twice.
 
     BEST-EFFORT ON PURPOSE: every exception here is caught and logged, never
     raised. Without this, a real bug would follow: the primary action
     (post a message, upload a document) can succeed and then this
-    AFTERWARD step — its own separate calls to converse-module/ocr-module —
+    AFTERWARD step â€” its own separate calls to converse-module/ocr-module â€”
     fails for an unrelated reason (a transient network blip, one of those
     services being momentarily slow), and the exception would propagate up
     through post_message/upload_document and turn an already-successful
@@ -223,7 +225,7 @@ async def _persist_snapshot(visit: store.Visit) -> dict:
 
 
 def jsonable_summary(summary: dict) -> dict:
-    """summary["visit"] is a store.Visit (a pydantic model) — everything
+    """summary["visit"] is a store.Visit (a pydantic model) â€” everything
     else in the dict is already plain dict/list/str data straight from
     httpx/JSON. json.dumps() in db.py can't serialize a pydantic model
     directly, so this converts just that one field. Kept as a small
@@ -247,12 +249,12 @@ async def start_visit(req: StartVisitRequest, background_tasks: BackgroundTasks)
         converse_backend=session["backend"],
         language=req.language,
     )
-    # Persistence is deliberately a background task, not awaited inline —
+    # Persistence is deliberately a background task, not awaited inline â€”
     # see _persist_snapshot's own docstring for why it's best-effort. It
     # used to be `await`ed here, which meant every patient action paid for
     # 3-4 extra network round-trips (a fresh history fetch, two OCR calls
     # that can't possibly find anything on a brand-new visit) before the
-    # patient saw anything happen — that was the actual cause of "Begin
+    # patient saw anything happen â€” that was the actual cause of "Begin
     # check-in takes a while" / "it all seems slow", not the LLM call.
     # Scheduling it here means the patient gets their response as soon as
     # the real work (starting the interview) is done; the snapshot catches
@@ -265,7 +267,7 @@ async def start_visit(req: StartVisitRequest, background_tasks: BackgroundTasks)
         "backend": visit.backend,
         "converse_backend": visit.converse_backend,
         "ocr_backend_note": (
-            f"document scan will use '{ocr_backend_for(visit)}' — Ollama has no vision backend wired up yet"
+            f"document scan will use '{ocr_backend_for(visit)}' â€” Ollama has no vision backend wired up yet"
             if visit.backend == "ollama"
             else None
         ),
@@ -289,7 +291,7 @@ async def post_message(visit_id: str, req: MessageRequest, background_tasks: Bac
     visit = _get_visit(visit_id)
     result = await clients.converse_post_message(visit.converse_session_id, req.text)
     # See start_visit's comment: persistence runs after the response goes
-    # back to the patient, not before — this is the call that used to add
+    # back to the patient, not before â€” this is the call that used to add
     # 3 extra round-trips to every single chat turn.
     background_tasks.add_task(_persist_snapshot, visit)
     return result
@@ -297,13 +299,13 @@ async def post_message(visit_id: str, req: MessageRequest, background_tasks: Bac
 
 @app.post("/visits/{visit_id}/message/stream")
 async def post_message_stream(visit_id: str, req: MessageRequest):
-    """SSE proxy for the "live tokens" feature — see
+    """SSE proxy for the "live tokens" feature â€” see
     clients.converse_post_message_stream and converse-module/app/main.py's
     post_message_stream for the actual protocol; this endpoint just wires a
     visit_id to the right converse-module session_id and relays bytes.
 
     Persistence runs via StreamingResponse's `background` hook instead of
-    the injected BackgroundTasks dependency used elsewhere in this file —
+    the injected BackgroundTasks dependency used elsewhere in this file â€”
     the effect is the same (best-effort, non-blocking, see
     _persist_snapshot's docstring), but a StreamingResponse's body isn't
     fully sent until the stream ends, and `background` is what guarantees
@@ -329,12 +331,12 @@ async def transcribe_audio(
     file: UploadFile = File(...),
     language: Optional[str] = Form(default=None),
 ):
-    """Speech-to-text only — this does NOT post the result as a message.
+    """Speech-to-text only â€” this does NOT post the result as a message.
     The frontend fills the chat input box with the returned text so the
     patient (or a staff member) can review/correct it before it's sent,
     rather than auto-submitting whatever Whisper thought it heard straight
     into the clinical record. visit_id is only used to 404 consistently
-    with the other endpoints — the voice module itself is stateless and
+    with the other endpoints â€” the voice module itself is stateless and
     doesn't know about visits."""
     _get_visit(visit_id)
     raw = await file.read()
@@ -364,7 +366,7 @@ async def upload_document(
         backend=ocr_backend_for(visit),
     )
     store.bump_document_count(visit_id)
-    # Same as start_visit/post_message — don't make the patient wait on it.
+    # Same as start_visit/post_message â€” don't make the patient wait on it.
     background_tasks.add_task(_persist_snapshot, visit)
     return result
 
@@ -389,13 +391,13 @@ async def get_summary(visit_id: str):
 
 # ---- Doctor-facing view (2026-09-11) ---------------------------------------
 #
-# NO AUTH — see this module's docstring. Read-only: staff can look up and
+# NO AUTH â€” see this module's docstring. Read-only: staff can look up and
 # browse visits here, but there is deliberately no endpoint that lets this
 # view edit clinical data; if a correction is needed it should happen through
 # the same intake flow (or eventually a real EMR), not a side door here.
 
 def _visit_queue_row(row: dict) -> dict:
-    """Shapes one db.list_recent() row for the queue view — deliberately
+    """Shapes one db.list_recent() row for the queue view â€” deliberately
     thinner than a full summary (no history/documents payload) so the queue
     endpoint stays cheap to poll even as more visits accumulate. The doctor
     page follows up with GET /doctor/visits/{token} for the one visit
@@ -419,9 +421,9 @@ def _visit_queue_row(row: dict) -> dict:
 async def doctor_list_visits(limit: int = 100):
     """The queue view: most urgent first (red_flag, then triage_level, per
     _TRIAGE_ORDER above), most recently updated first within the same
-    urgency — so a just-answered "routine" turn doesn't jump ahead of an
+    urgency â€” so a just-answered "routine" turn doesn't jump ahead of an
     "urgent" one from ten minutes ago just because it's fresher. Reads from
-    db.py, not store.py's in-memory dict — that's deliberate: this should
+    db.py, not store.py's in-memory dict â€” that's deliberate: this should
     show every visit this kiosk has ever recorded, including ones from
     before the current process started, not just what's in memory right
     now."""
@@ -439,12 +441,12 @@ async def doctor_list_visits(limit: int = 100):
 @app.get("/doctor/visits/{token}")
 async def doctor_get_visit(token: str):
     """Full detail for one visit, by its patient-facing token (see
-    store.py's docstring — NOT a verified patient identity, just this
+    store.py's docstring â€” NOT a verified patient identity, just this
     kiosk's own lookup code). Prefers the LIVE summary (a fresh call to
     converse-module/ocr-module) when the visit is still in this process's
     memory, since that reflects anything that happened since the last
     snapshot; falls back to the last persisted snapshot in db.py otherwise
-    — e.g. after a kiosk-backend restart, or once converse-module's own
+    â€” e.g. after a kiosk-backend restart, or once converse-module's own
     session has expired/gone. Either way the caller gets the best data
     available, and `live: false` in the response says which one it got so
     the UI can be honest about it rather than presenting a possibly-stale
@@ -455,7 +457,7 @@ async def doctor_get_visit(token: str):
             summary = await _build_summary(visit)
             return {"live": True, **jsonable_summary(summary)}
         except HTTPException:
-            pass  # converse-module unreachable/session gone — fall through to the snapshot below
+            pass  # converse-module unreachable/session gone â€” fall through to the snapshot below
 
     row = db.get_by_token(token)
     if row is None:
@@ -468,7 +470,7 @@ templates = Jinja2Templates(directory=str(_templates_dir))
 
 # The patient check-in flow is one page (templates/index.html) that {%
 # include %}s five separate per-screen template files under
-# templates/screens/ — reorganized 2026-09-11 for readability, purely
+# templates/screens/ â€” reorganized 2026-09-11 for readability, purely
 # organizational. The JS still does client-side show/hide between screens
 # with no page reload, so this changes nothing about behavior: Jinja just
 # assembles the same five sections into one page at request time instead of
@@ -486,3 +488,38 @@ async def serve_index(request: Request) -> HTMLResponse:
 @app.get("/doctor.html", response_class=HTMLResponse, include_in_schema=False)
 async def serve_doctor(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "doctor.html")
+
+class VitalsInput(BaseModel):
+    respiratory_rate: Optional[int] = None
+    spo2: Optional[int] = None
+    on_oxygen: Optional[int] = 0
+    systolic_bp: Optional[int] = None
+    diastolic_bp: Optional[int] = None
+    pulse: Optional[int] = None
+    temperature_c: Optional[float] = None
+    temperature_f: Optional[float] = None
+    consciousness: Optional[str] = "Alert"
+
+@app.post("/api/visits/{token}/vitals")
+async def save_visit_vitals(token: str, vitals: VitalsInput):
+    visit = db.get_visit_by_token(token)
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found")
+    
+    v_dict = vitals.model_dump()
+    news2_result = calculate_news2(v_dict)
+    
+    # Update local visit state
+    v_dict["news2"] = news2_result
+    visit["vitals"] = v_dict
+    db.save_visit(visit)
+    
+    return {"status": "ok", "vitals": v_dict, "news2": news2_result}
+
+@app.get("/api/visits/{token}/fhir")
+async def get_visit_fhir(token: str):
+    visit = db.get_visit_by_token(token)
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found")
+    bundle = generate_fhir_bundle(visit)
+    return bundle
